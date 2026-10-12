@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:widgetbook/widgetbook.dart';
 
+import 'components/icon_use_cases.dart';
 import 'foundations/colors_page.dart';
 import 'foundations/gradients_page.dart';
 import 'foundations/layout_page.dart';
@@ -60,6 +61,11 @@ class SampathWidgetbook extends StatelessWidget {
             _page('Shadows', const ShadowsPage()),
             _page('Gradients', const GradientsPage()),
           ],
+        ),
+        WidgetbookFolder(
+          name: 'Components',
+          isInitiallyExpanded: true,
+          children: [iconComponent()],
         ),
       ],
     );

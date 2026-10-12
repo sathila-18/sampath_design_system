@@ -474,7 +474,7 @@ Figma file `ztpSPR24LsEQl2L4OxUX3T`, page **brand icon**. All are 24 × 24 compo
 | `NEW` | `204:100` | — | — | ⏳ **On hold.** It's text, not a pictogram (see §10) |
 | `paypal` | `204:123` | `SampathIcons.paypal` | `assets/icons/partner/paypal.svg` | **Partner logo**, not a Sampath icon |
 
-**Exporting:** export SVGs from the Figma nodes above. Each icon contains a hidden guide frame (`Frame 3`, red keylines). Make sure it's **not** in the exported SVG, and check every file before committing.
+**Exported 12 Oct 2026** from the nodes above; the hidden guide frames are not in the files. To re-export: export SVGs from the Figma nodes above. Each icon contains a hidden guide frame (`Frame 3`, red keylines). Make sure it's **not** in the exported SVG, and check every file before committing.
 
 ---
 
@@ -562,7 +562,7 @@ All node IDs are in the component file `Osc9AnJnbWQLesqVlhNsii`. Where a Figma n
 
 | # | Figma component | Page | Node | Code name | Variants / properties | Status |
 |---|---|---|---|---|---|---|
-| 1 | `16px`, `20px`, `24px`, `36px`, `48px` | Icon sizes | `20:245`, `20:261`, `20:277`, `20:293`, `20:353` | `SampathIcon` | State: Primary/Secondary/Disabled/Success/Error/Info/Warning (**see §9.1**) | ⬜ |
+| 1 | `16px`, `20px`, `24px`, `36px`, `48px` | Icon sizes | `20:245`, `20:261`, `20:277`, `20:293`, `20:353` | `SampathIcon` | State: Primary/Secondary/Disabled/Success/Error/Info/Warning (**see §9.1**) | ✅ |
 | 2 | `Divider` | Divider | `28:367` | `SampathDivider` | Type: Divider / Section Divider | ⬜ |
 | 3 | `Divider dash` | Divider | `596:1256` | `SampathDividerDash` | — | ⬜ |
 | 4 | `Badge - indicator` | Badge | `30:1500` | `SampathBadgeIndicator` | Size: Large/Small · Digits: None/Single/Double · Style: Red/Yellow/Green | ⬜ |
@@ -724,7 +724,24 @@ SampathIcon(
 )
 ```
 
-**Widgetbook:** one use case per size, with knobs for icon, size and color, plus a grid of all sizes × colors in Light and Dark.
+**Widgetbook:** one use case per size, with an Icon type knob (Utility / Brand & partner) that filters the Icon knob (A–Z), and a Color knob for utility icons only. Plus a grid of all sizes × colors (utility icons only) and the registry, in Light and Dark.
+
+**Built (12 Oct 2026).** `lib/icons/`: `SampathIcon`, `SampathIconSize`, `SampathIconColor`, `SampathIconData`, `SampathIcons`.
+
+- **Checked against Figma:** five sets, sizes 16/20/24/36/48, strokes 1 / 1.5, seven `State` variants bound to the `fg-*` tokens above. Matches this spec.
+- **Sizes** are a closed enum. They're component sizes, not spacing, so they aren't taken from `SampathSpacing` (36 has no token).
+- **Color:** `SampathIconColor` has the seven Figma states plus every other `fg-*` token, so component specs can use `fg-brand`, `fg-inverse`, `fg-action` etc. without raw colors. Ignored for brand and partner icons.
+- **Semantics:** with `semanticLabel` the icon is an image with that label; without it, it's decorative and hidden from screen readers.
+- **Dependencies:** `iconoir_flutter` 7.12.1 (pinned) and `flutter_svg` for brand and partner SVGs.
+
+**Registry contents.** Only icons the component file uses (scan of all component pages, excluding 🔒 Do not use, 12 Oct 2026). Code names are the Figma names in camelCase.
+
+| Kind | Icons |
+|---|---|
+| Utility (Iconoir), 48 | `arrow-down-left`, `arrow-up`, `arrow-up-right`, `bell`, `calendar`, `camera`, `card-no-access`, `chat-bubble`, `check`, `check-circle`, `check-circle-solid`, `clock`, `clock-rotate-right`, `coins`, `credit-card`, `data-transfer-both`, `download`, `edit-pencil`, `eye`, `eye-closed`, `fast-arrow-right`, `globe`, `graph-up`, `headset-help`, `home-simple`, `info-circle`, `lock`, `microphone`, `minus`, `more-horiz`, `nav-arrow-down`, `nav-arrow-left`, `nav-arrow-right`, `nav-arrow-up`, `plus`, `refresh-double`, `scan-qr-code`, `search`, `settings`, `share-android`, `star`, `trash`, `upload`, `user`, `wallet`, `warning-triangle`, `xmark`, `xmark-solid` |
+| Renamed in Iconoir | `xmark-solid` is drawn with `XmarkCircleSolid` (current Iconoir name for the same icon). See §10 #17. |
+| Brand, 4 | `assistant`, `insights`, `transaction`, `transfer` |
+| Partner, 1 | `paypal` |
 
 **Icon containers (L1, built right after):**
 
@@ -758,6 +775,9 @@ The **octagon** must be the exact Figma path. Export the mask vector from `46px 
 | 13 | `Empty state` uses `Small illustrations-don't use` | Empty state | 🔧 Fix in Figma |
 | 14 | The octagon mask vector in `46px bg` and `68px bg` has a fill linked to a leftover `html.to.design` variable. Harmless (it's a mask), but it's an external dependency. | Icon sizes | 🧹 Optional cleanup |
 | 15 | Motion: plan is to adopt Material 3 easing and duration pairs (see §5) | §5 | ⏳ Deferred. Revisit later. |
+| 16 | Sinhala wraps tightly (1.5–1.8 px between lines) in Display/Large-H1, Display/Medium-H2, Title/XLarge and Button/XLarge, and small Sinhala (10–12 px) is hard to read. Accepted for now. Revisit if it shows up in real screens. | Typography (§3.4) | ⏳ |
+| 17 | Iconoir `xmark-solid` (used in Input field, Notification banners, Search) doesn't exist in `iconoir_flutter` 7.12.1. The closest is `XmarkCircleSolid` (same filled circle with an X; Figma's version is drawn as fill + 1 px stroke, so the X ends differ slightly). **Resolved:** it's the same icon, renamed `xmark-circle-solid` in newer Iconoir. `SampathIcons.xmarkSolid` uses `XmarkCircleSolid`. | Icons | ✅ Resolved (12 Oct 2026) |
+| 18 | Figma uses an older Iconoir library, so some icon names and drawings differ slightly from `iconoir_flutter` 7.12.1. Design may switch Figma to the current Iconoir library later. Code needs no change. (Note for design only.) | Icons | ⏳ |
 
 ---
 
@@ -771,3 +791,5 @@ The **octagon** must be the exact Figma path. Export the mask vector from `46px 
 | 12 Oct 2026 | 0.2 | Tokens re-exported: alias `Primary-900` renamed to `Primary1-900` (§10 #1 fixed). No value changes. |
 | 12 Oct 2026 | 0.2 | S3: `styles.dart` (shadows incl. `Shadow/Back` inner shadow painter, background blur, gradients with Figma transforms; values re-read from Figma and match §4). S5: Widgetbook app with Light/Dark theme switch and a Foundations folder (Colors, Typography, Spacing, Radius, Layout, Shadows, Gradients). |
 | 12 Oct 2026 | 0.2 | Noto Sans Sinhala and Noto Sans Tamil (400–800) bundled and set as `fontFamilyFallback` on every text style (§3.4). Typography page gets English / Sinhala / Tamil samples. |
+| 12 Oct 2026 | 0.2 | §9.1 Icon built: `SampathIcon` (5 sizes, 7 states + other fg-*), `SampathIcons` registry (47 Iconoir icons used in Figma, 4 brand, 1 partner), brand/partner SVGs exported from Figma, Widgetbook Icon pages. `xmark-solid` pending (§10 #17). |
+| 12 Oct 2026 | 0.2 | §10 #17 resolved: `xmark-solid` added to the registry as `XmarkCircleSolid` (48 Iconoir icons). New §10 #18: Figma uses an older Iconoir library (note for design). Widgetbook Icon pages get an Icon type knob. |
