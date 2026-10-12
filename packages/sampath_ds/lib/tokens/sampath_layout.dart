@@ -29,4 +29,20 @@ abstract final class SampathLayout {
   static const double iconText = 8.0; // Space-M
   /// This should be the gap between buttons
   static const double buttonGap = 12.0; // Space-L
+
+  /// Every token by its Figma name, in Figma order (for catalogues).
+  static const Map<String, double> byFigmaName = {
+    'Layout/screen-margin': screenMargin,
+    'Layout/section-gap': sectionGap,
+    'Layout/section-gap_large': sectionGapLarge,
+    'Layout/header-to-content': headerToContent,
+    'Component/card-padding': cardPadding,
+    'Component/card-gap_small': cardGapSmall,
+    'Component/card-gap_medium': cardGapMedium,
+    'Component/card-gap_large': cardGapLarge,
+    'Component/input-padding': inputPadding,
+    'Component/list-padding': listPadding,
+    'Component/icon-text': iconText,
+    'Component/button-gap': buttonGap,
+  };
 }

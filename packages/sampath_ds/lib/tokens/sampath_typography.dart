@@ -12,10 +12,17 @@ import 'package:flutter/painting.dart';
 abstract final class SampathTextStyles {
   static const String _package = 'sampath_ds';
 
+  /// Sinhala and Tamil fallbacks (DESIGN.md §3.4).
+  static const List<String> _fallback = [
+    'Noto Sans Sinhala',
+    'Noto Sans Tamil',
+  ];
+
   /// `Display/Large-H1` · 800 · 36 / 46.8
   static const TextStyle displayLargeH1 = TextStyle(
     fontFamily: 'Hanken Grotesk',
     package: _package,
+    fontFamilyFallback: _fallback,
     fontWeight: FontWeight.w800,
     fontSize: 36.0,
     height: 1.3, // 46.8 / 36
@@ -27,6 +34,7 @@ abstract final class SampathTextStyles {
   static const TextStyle displayMediumH2 = TextStyle(
     fontFamily: 'Hanken Grotesk',
     package: _package,
+    fontFamilyFallback: _fallback,
     fontWeight: FontWeight.w800,
     fontSize: 32.0,
     height: 1.3, // 41.6 / 32
@@ -38,6 +46,7 @@ abstract final class SampathTextStyles {
   static const TextStyle displaySmallH3 = TextStyle(
     fontFamily: 'Hanken Grotesk',
     package: _package,
+    fontFamilyFallback: _fallback,
     fontWeight: FontWeight.w800,
     fontSize: 28.0,
     height: 1.4, // 39.2 / 28
@@ -49,6 +58,7 @@ abstract final class SampathTextStyles {
   static const TextStyle headlineLargeH4 = TextStyle(
     fontFamily: 'Hanken Grotesk',
     package: _package,
+    fontFamilyFallback: _fallback,
     fontWeight: FontWeight.w800,
     fontSize: 24.0,
     height: 1.4, // 33.6 / 24
@@ -60,6 +70,7 @@ abstract final class SampathTextStyles {
   static const TextStyle headlineMediumH5 = TextStyle(
     fontFamily: 'Hanken Grotesk',
     package: _package,
+    fontFamilyFallback: _fallback,
     fontWeight: FontWeight.w700,
     fontSize: 20.0,
     height: 1.4, // 28 / 20
@@ -71,6 +82,7 @@ abstract final class SampathTextStyles {
   static const TextStyle headlineSmallH6 = TextStyle(
     fontFamily: 'Hanken Grotesk',
     package: _package,
+    fontFamilyFallback: _fallback,
     fontWeight: FontWeight.w700,
     fontSize: 16.0,
     height: 1.5, // 24 / 16
@@ -82,6 +94,7 @@ abstract final class SampathTextStyles {
   static const TextStyle bodyLarge = TextStyle(
     fontFamily: 'Hanken Grotesk',
     package: _package,
+    fontFamilyFallback: _fallback,
     fontWeight: FontWeight.w400,
     fontSize: 16.0,
     height: 1.5, // 24 / 16
@@ -93,6 +106,7 @@ abstract final class SampathTextStyles {
   static const TextStyle bodyMedium = TextStyle(
     fontFamily: 'Hanken Grotesk',
     package: _package,
+    fontFamilyFallback: _fallback,
     fontWeight: FontWeight.w400,
     fontSize: 14.0,
     height: 1.5, // 21 / 14
@@ -104,6 +118,7 @@ abstract final class SampathTextStyles {
   static const TextStyle bodySmall = TextStyle(
     fontFamily: 'Hanken Grotesk',
     package: _package,
+    fontFamilyFallback: _fallback,
     fontWeight: FontWeight.w400,
     fontSize: 12.0,
     height: 1.5, // 18 / 12
@@ -115,6 +130,7 @@ abstract final class SampathTextStyles {
   static const TextStyle titleXLarge = TextStyle(
     fontFamily: 'Hanken Grotesk',
     package: _package,
+    fontFamilyFallback: _fallback,
     fontWeight: FontWeight.w600,
     fontSize: 32.0,
     height: 1.3, // 41.6 / 32
@@ -126,6 +142,7 @@ abstract final class SampathTextStyles {
   static const TextStyle titleLarge = TextStyle(
     fontFamily: 'Hanken Grotesk',
     package: _package,
+    fontFamilyFallback: _fallback,
     fontWeight: FontWeight.w600,
     fontSize: 18.0,
     height: 1.4, // 25.2 / 18
@@ -137,6 +154,7 @@ abstract final class SampathTextStyles {
   static const TextStyle titleMedium = TextStyle(
     fontFamily: 'Hanken Grotesk',
     package: _package,
+    fontFamilyFallback: _fallback,
     fontWeight: FontWeight.w600,
     fontSize: 16.0,
     height: 1.5, // 24 / 16
@@ -148,6 +166,7 @@ abstract final class SampathTextStyles {
   static const TextStyle titleSmall = TextStyle(
     fontFamily: 'Hanken Grotesk',
     package: _package,
+    fontFamilyFallback: _fallback,
     fontWeight: FontWeight.w600,
     fontSize: 14.0,
     height: 1.5, // 21 / 14
@@ -159,6 +178,7 @@ abstract final class SampathTextStyles {
   static const TextStyle labelLarge = TextStyle(
     fontFamily: 'Hanken Grotesk',
     package: _package,
+    fontFamilyFallback: _fallback,
     fontWeight: FontWeight.w600,
     fontSize: 16.0,
     height: 1.5, // 24 / 16
@@ -170,6 +190,7 @@ abstract final class SampathTextStyles {
   static const TextStyle labelMedium = TextStyle(
     fontFamily: 'Hanken Grotesk',
     package: _package,
+    fontFamilyFallback: _fallback,
     fontWeight: FontWeight.w600,
     fontSize: 14.0,
     height: 1.5, // 21 / 14
@@ -181,6 +202,7 @@ abstract final class SampathTextStyles {
   static const TextStyle labelSmall = TextStyle(
     fontFamily: 'Hanken Grotesk',
     package: _package,
+    fontFamilyFallback: _fallback,
     fontWeight: FontWeight.w600,
     fontSize: 12.0,
     height: 1.5, // 18 / 12
@@ -192,6 +214,7 @@ abstract final class SampathTextStyles {
   static const TextStyle captionLarge = TextStyle(
     fontFamily: 'Hanken Grotesk',
     package: _package,
+    fontFamilyFallback: _fallback,
     fontWeight: FontWeight.w500,
     fontSize: 12.0,
     height: 1.5, // 18 / 12
@@ -203,6 +226,7 @@ abstract final class SampathTextStyles {
   static const TextStyle captionMedium = TextStyle(
     fontFamily: 'Hanken Grotesk',
     package: _package,
+    fontFamilyFallback: _fallback,
     fontWeight: FontWeight.w500,
     fontSize: 11.0,
     height: 1.5, // 16.5 / 11
@@ -214,6 +238,7 @@ abstract final class SampathTextStyles {
   static const TextStyle captionSmall = TextStyle(
     fontFamily: 'Hanken Grotesk',
     package: _package,
+    fontFamilyFallback: _fallback,
     fontWeight: FontWeight.w600,
     fontSize: 10.0,
     height: 1.5, // 15 / 10
@@ -225,6 +250,7 @@ abstract final class SampathTextStyles {
   static const TextStyle buttonXLarge = TextStyle(
     fontFamily: 'Hanken Grotesk',
     package: _package,
+    fontFamilyFallback: _fallback,
     fontWeight: FontWeight.w700,
     fontSize: 18.0,
     height: 1.3333, // 24 / 18
@@ -236,6 +262,7 @@ abstract final class SampathTextStyles {
   static const TextStyle buttonLarge = TextStyle(
     fontFamily: 'Hanken Grotesk',
     package: _package,
+    fontFamilyFallback: _fallback,
     fontWeight: FontWeight.w700,
     fontSize: 16.0,
     height: 1.5, // 24 / 16
@@ -247,6 +274,7 @@ abstract final class SampathTextStyles {
   static const TextStyle buttonMedium = TextStyle(
     fontFamily: 'Hanken Grotesk',
     package: _package,
+    fontFamilyFallback: _fallback,
     fontWeight: FontWeight.w700,
     fontSize: 14.0,
     height: 1.7143, // 24 / 14
@@ -258,10 +286,38 @@ abstract final class SampathTextStyles {
   static const TextStyle buttonSmall = TextStyle(
     fontFamily: 'Hanken Grotesk',
     package: _package,
+    fontFamilyFallback: _fallback,
     fontWeight: FontWeight.w700,
     fontSize: 12.0,
     height: 2.0, // 24 / 12
     letterSpacing: 0.0,
     leadingDistribution: TextLeadingDistribution.even,
   );
+
+  /// Every token by its Figma name, in Figma order (for catalogues).
+  static const Map<String, TextStyle> byFigmaName = {
+    'Display/Large-H1': displayLargeH1,
+    'Display/Medium-H2': displayMediumH2,
+    'Display/Small-H3': displaySmallH3,
+    'Headline/Large-H4': headlineLargeH4,
+    'Headline/Medium-H5': headlineMediumH5,
+    'Headline/Small-H6': headlineSmallH6,
+    'Body/Large': bodyLarge,
+    'Body/Medium': bodyMedium,
+    'Body/Small': bodySmall,
+    'Title/XLarge': titleXLarge,
+    'Title/Large': titleLarge,
+    'Title/Medium': titleMedium,
+    'Title/Small': titleSmall,
+    'Label/Large': labelLarge,
+    'Label/Medium': labelMedium,
+    'Label/Small': labelSmall,
+    'Caption/Large': captionLarge,
+    'Caption/Medium': captionMedium,
+    'Caption/Small': captionSmall,
+    'Button/XLarge': buttonXLarge,
+    'Button/Large': buttonLarge,
+    'Button/Medium': buttonMedium,
+    'Button/Small': buttonSmall,
+  };
 }

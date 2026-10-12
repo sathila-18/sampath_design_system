@@ -56,6 +56,10 @@ void main() {
       expect(style.fontSize, 36);
       expect(style.fontSize! * style.height!, closeTo(46.8, 0.001));
       expect(style.fontFamily, 'packages/sampath_ds/Hanken Grotesk');
+      expect(style.fontFamilyFallback, [
+        'packages/sampath_ds/Noto Sans Sinhala',
+        'packages/sampath_ds/Noto Sans Tamil',
+      ]);
     });
 
     test('every style matches DESIGN.md §3.4', () {

@@ -20,6 +20,11 @@ const _inputPath = 'tokens/design.tokens.json';
 const _outputDir = 'packages/sampath_ds/lib/tokens';
 const _modes = ['Light', 'Dark'];
 
+// Script fallbacks for Sinhala and Tamil (Hanken Grotesk is Latin only).
+// Not in the Figma export; recorded in DESIGN.md §3.4. Bundled in
+// packages/sampath_ds/pubspec.yaml.
+const _fontFamilyFallback = ['Noto Sans Sinhala', 'Noto Sans Tamil'];
+
 const _header = '''
 // GENERATED CODE — DO NOT EDIT BY HAND.
 // Source: tokens/design.tokens.json · Generator: tool/generate_tokens.dart
@@ -390,7 +395,14 @@ String _semanticColors() {
     out.writeln('      ${t.name}: Color.lerp(${t.name}, other.${t.name}, t)!,');
   }
   out
-    ..writeln('    );\n  }')
+    ..writeln('    );\n  }\n')
+    ..writeln('  /// Every token by its Figma name, in Figma order (for catalogues).')
+    ..writeln('  Map<String, Color> get byFigmaName => {');
+  for (final t in tokens) {
+    out.writeln("    '${t.figma}': ${t.name},");
+  }
+  out
+    ..writeln('  };')
     ..writeln('}\n')
     ..writeln('/// `context.colors.bgPrimary` etc.')
     ..writeln('extension SampathColorsContext on BuildContext {')
@@ -422,15 +434,18 @@ String _scaleClass({
     ..writeln(doc)
     ..writeln('abstract final class $className {');
   final names = <String>[];
+  final figmaNames = <String>[];
   for (final token in _tokensIn(_group(path))) {
     final name = _scaleName(token.key, prefix);
     names.add(name);
+    figmaNames.add(token.key);
     out.writeln(
       '  static const double $name = '
       '${_double(_dimension(token.value, token.key))}; // ${token.key}',
     );
   }
   _checkUnique(names, className);
+  out.write(_byFigmaName('double', figmaNames, names));
   out.writeln('}');
   return out.toString();
 }
@@ -461,6 +476,7 @@ String _layout() {
     ..writeln('/// (`Component collection` › Mobile). See DESIGN.md §3.7.')
     ..writeln('abstract final class SampathLayout {');
   final names = <String>[];
+  final figmaNames = <String>[];
   final mobile = _group(['Component collection', 'Mobile']);
   for (final group in mobile.entries) {
     if (group.key.startsWith(r'$')) continue;
@@ -468,6 +484,7 @@ String _layout() {
     for (final token in _tokensIn(group.value as Map<String, dynamic>)) {
       final name = _camel(token.key);
       names.add(name);
+      figmaNames.add('${group.key}/${token.key}');
       final target = _aliasName(token.value[r'$value']);
       out
         ..write(
@@ -482,6 +499,7 @@ String _layout() {
     }
   }
   _checkUnique(names, 'SampathLayout');
+  out.write(_byFigmaName('double', figmaNames, names));
   out.writeln('}');
   return out.toString();
 }
@@ -515,9 +533,14 @@ String _typography() {
     ..writeln('/// Styles carry no color; components set it from')
     ..writeln('/// `context.colors`.')
     ..writeln('abstract final class SampathTextStyles {')
-    ..writeln("  static const String _package = 'sampath_ds';\n");
+    ..writeln("  static const String _package = 'sampath_ds';\n")
+    ..writeln('  /// Sinhala and Tamil fallbacks (DESIGN.md §3.4).')
+    ..writeln('  static const List<String> _fallback = [')
+    ..writeln(_fontFamilyFallback.map((f) => "    '$f',").join('\n'))
+    ..writeln('  ];\n');
 
   final names = <String>[];
+  final figmaNames = <String>[];
   String? family;
   for (final group in _group(['Alias Typography']).entries) {
     if (group.key.startsWith(r'$')) continue;
@@ -552,6 +575,7 @@ String _typography() {
     final figmaName = _textStyleName(group.key);
     final name = _textStyleDartName(figmaName);
     names.add(name);
+    figmaNames.add(figmaName);
     out
       ..writeln(
         '  /// `$figmaName` · ${weight.toInt()} · ${_trim(size)} / '
@@ -560,6 +584,7 @@ String _typography() {
       ..writeln('  static const TextStyle $name = TextStyle(')
       ..writeln("    fontFamily: '$family',")
       ..writeln('    package: _package,')
+      ..writeln('    fontFamilyFallback: _fallback,')
       ..writeln('    fontWeight: FontWeight.w${weight.toInt()},')
       ..writeln('    fontSize: ${_double(size)},')
       ..writeln('    height: ${_double(lineHeight / size)}, // ${_trim(lineHeight)} / ${_trim(size)}')
@@ -568,8 +593,20 @@ String _typography() {
       ..writeln('  );\n');
   }
   _checkUnique(names, 'SampathTextStyles');
+  out.write(_byFigmaName('TextStyle', figmaNames, names));
   out.writeln('}');
   return out.toString();
+}
+
+String _byFigmaName(String type, List<String> figma, List<String> dart) {
+  final b = StringBuffer()
+    ..writeln()
+    ..writeln('  /// Every token by its Figma name, in Figma order (for catalogues).')
+    ..writeln('  static const Map<String, $type> byFigmaName = {');
+  for (var i = 0; i < figma.length; i++) {
+    b.writeln("    '${figma[i]}': ${dart[i]},");
+  }
+  return (b..writeln('  };')).toString();
 }
 
 String _trim(num value) =>

@@ -30,3 +30,27 @@ flutter:
           weight: 700
         - asset: assets/fonts/HankenGrotesk-ExtraBold.ttf
           weight: 800
+    - family: Noto Sans Sinhala
+      fonts:
+        - asset: assets/fonts/NotoSansSinhala-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/NotoSansSinhala-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/NotoSansSinhala-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/NotoSansSinhala-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/NotoSansSinhala-ExtraBold.ttf
+          weight: 800
+    - family: Noto Sans Tamil
+      fonts:
+        - asset: assets/fonts/NotoSansTamil-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/NotoSansTamil-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/NotoSansTamil-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/NotoSansTamil-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/NotoSansTamil-ExtraBold.ttf
+          weight: 800

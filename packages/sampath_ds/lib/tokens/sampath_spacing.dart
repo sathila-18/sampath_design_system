@@ -30,4 +30,31 @@ abstract final class SampathSpacing {
   static const double x15l = 1280.0; // Space-15XL
   static const double x16l = 1440.0; // Space-16XL
   static const double x17l = 1920.0; // Space-17XL
+
+  /// Every token by its Figma name, in Figma order (for catalogues).
+  static const Map<String, double> byFigmaName = {
+    'Space-none': none,
+    'Space-XXS': xxs,
+    'Space-XS': xs,
+    'Space-S': s,
+    'Space-M': m,
+    'Space-L': l,
+    'Space-XL': xl,
+    'Space-2XL': x2l,
+    'Space-3XL': x3l,
+    'Space-4XL': x4l,
+    'Space-5XL': x5l,
+    'Space-6XL': x6l,
+    'Space-7XL': x7l,
+    'Space-8XL': x8l,
+    'Space-9XL': x9l,
+    'Space-10XL': x10l,
+    'Space-11XL': x11l,
+    'Space-12XL': x12l,
+    'Space-13XL': x13l,
+    'Space-14XL': x14l,
+    'Space-15XL': x15l,
+    'Space-16XL': x16l,
+    'Space-17XL': x17l,
+  };
 }

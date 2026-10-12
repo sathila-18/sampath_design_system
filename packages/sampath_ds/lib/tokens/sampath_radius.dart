@@ -13,4 +13,15 @@ abstract final class SampathRadius {
   static const double l = 16.0; // Radius-L
   static const double xl = 24.0; // Radius-XL
   static const double full = 999999.0; // Radius-Full
+
+  /// Every token by its Figma name, in Figma order (for catalogues).
+  static const Map<String, double> byFigmaName = {
+    'Radius-none': none,
+    'Radius-XS': xs,
+    'Radius-S': s,
+    'Radius-M': m,
+    'Radius-L': l,
+    'Radius-XL': xl,
+    'Radius-Full': full,
+  };
 }
