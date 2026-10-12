@@ -238,6 +238,8 @@ _Collection `Color collection`, modes **Light** and **Dark**. **Components must 
 
 Font family: **Hanken Grotesk** (`Primitives/Typography/Font style/Primary-font`). Letter spacing 0 for all styles.
 
+**Script fallback (code only, not in Figma):** Hanken Grotesk covers Latin only. Every text style sets `fontFamilyFallback` to **Noto Sans Sinhala**, then **Noto Sans Tamil** (Google Fonts, OFL, weights 400–800 bundled), so Sinhala and Tamil text renders in the same weight as the style. The fallback is set in `tool/generate_tokens.dart`, not in the token export. Line heights are the same as for Latin; see the Typography page in Widgetbook to check them per script.
+
 | Text style (Figma) | Variable group | Weight | Size | Line height | Note |
 |---|---|---|---|---|---|
 | `Display/Large-H1` | `Display Large-H1` | 800 | 36 | 46.8 |  |
@@ -366,6 +368,7 @@ There are 23 styles, all linked to `Alias Typography` variables. Names and value
 
 - The gradient stops are fixed hex values in Figma, not linked to variables. In code, build each stop from the matching token where one exists (Violet-500, Violet-400, Orange-50, White).
 - **Direction:** take the gradient handles (angle) from the Figma style when building. Don't guess.
+  - Done (12 Oct 2026): the styles use a skewed `gradientTransform`, so no single angle reproduces them on every aspect ratio. `styles.dart` applies Figma's matrix directly (`SampathFigmaGradientTransform`). `Luxury purple` and `Vermilion` share `[[0.9817, 0.3619, -0.3436], [-2.4627, 1.237, 1.362]]`; `Assistant` is `[[1.2801, 0.3041, 0], [-1.7932, 1.511, 0.5]]`. If a gradient's handles change in Figma, update these numbers.
 - Gradients don't change between Light and Dark.
 
 ### 4.3 Shadows and effects (effect styles)
@@ -551,9 +554,9 @@ All node IDs are in the component file `Osc9AnJnbWQLesqVlhNsii`. Where a Figma n
 |---|---|---|---|
 | S1 | Flutter package scaffold | `packages/sampath_ds/` | ✅ |
 | S2 | Token generator: `tokens/design.tokens.json` → Dart (handles the quirks in §3.8) | `lib/tokens/` (generated) | ✅ |
-| S3 | Styles by hand from §4 (shadows, gradients). Motion (§5) is deferred. | `lib/tokens/styles.dart` | ⬜ |
+| S3 | Styles by hand from §4 (shadows, gradients). Motion (§5) is deferred. | `lib/tokens/styles.dart` | ✅ |
 | S4 | Hanken Grotesk font files bundled (weights 400, 500, 600, 700, 800) | `assets/fonts/` | ✅ |
-| S5 | Widgetbook app with a Light/Dark switch, plus a Foundations page (colors, type, spacing, radius, shadows) | `widgetbook/` | ⬜ |
+| S5 | Widgetbook app with a Light/Dark switch, plus a Foundations page (colors, type, spacing, radius, shadows) | `widgetbook/` | ✅ |
 
 ### 8.1 Atoms, level 0: contain no other components
 
@@ -766,3 +769,5 @@ The **octagon** must be the exact Figma path. Export the mask vector from `46px 
 | 12 Oct 2026 | 0.2 | Tokens re-exported: `header-to-content` 24 → 16, `section-gap` 32 → 24, new `section-gap_large` (32, not used yet). Added mobile spacing rules and the slot rule to Core rules. Motion deferred, with Material 3 motion as the planned direction. |
 | 12 Oct 2026 | 0.2 | Setup S1 (package scaffold), S2 (token generator `tool/generate_tokens.dart` → 6 files in `lib/tokens/`) and S4 (Hanken Grotesk 400–800 static TTFs from Google Fonts, OFL) done. |
 | 12 Oct 2026 | 0.2 | Tokens re-exported: alias `Primary-900` renamed to `Primary1-900` (§10 #1 fixed). No value changes. |
+| 12 Oct 2026 | 0.2 | S3: `styles.dart` (shadows incl. `Shadow/Back` inner shadow painter, background blur, gradients with Figma transforms; values re-read from Figma and match §4). S5: Widgetbook app with Light/Dark theme switch and a Foundations folder (Colors, Typography, Spacing, Radius, Layout, Shadows, Gradients). |
+| 12 Oct 2026 | 0.2 | Noto Sans Sinhala and Noto Sans Tamil (400–800) bundled and set as `fontFamilyFallback` on every text style (§3.4). Typography page gets English / Sinhala / Tamil samples. |
