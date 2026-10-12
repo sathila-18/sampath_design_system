@@ -12,13 +12,13 @@ WidgetbookComponent iconComponent() => WidgetbookComponent(
       WidgetbookUseCase(
         name: '${size.dimension.toInt()}px',
         builder: (context) {
-          final type = _typeKnob(context);
-          final icon = _iconKnob(context, type);
+          final type = iconTypeKnob(context);
+          final icon = iconKnob(context, type);
           return _SingleIcon(
             icon: icon,
             size: size,
             // Brand icons keep their own colors, so no Color knob for them.
-            color: type == _IconType.utility
+            color: type == IconType.utility
                 ? _colorKnob(context)
                 : SampathIconColor.primary,
           );
@@ -46,11 +46,11 @@ const _states = [
   SampathIconColor.warning,
 ];
 
-enum _IconType {
+enum IconType {
   utility('Utility (Iconoir)', SampathIcons.utility, SampathIcons.lock),
   asset('Brand & partner', SampathIcons.assets, SampathIcons.assistant);
 
-  const _IconType(this.label, this.icons, this.initial);
+  const IconType(this.label, this.icons, this.initial);
 
   final String label;
   final List<SampathIconData> icons;
@@ -60,16 +60,16 @@ enum _IconType {
       [...icons]..sort((a, b) => a.figmaName.compareTo(b.figmaName));
 }
 
-_IconType _typeKnob(BuildContext context) =>
-    context.knobs.object.dropdown<_IconType>(
+IconType iconTypeKnob(BuildContext context) =>
+    context.knobs.object.dropdown<IconType>(
       label: 'Icon type',
-      options: _IconType.values,
+      options: IconType.values,
       labelBuilder: (t) => t.label,
     );
 
 // When the type changes, an Icon value from the other list falls back to
 // the type's initial icon.
-SampathIconData _iconKnob(BuildContext context, _IconType type) =>
+SampathIconData iconKnob(BuildContext context, IconType type) =>
     context.knobs.object.dropdown<SampathIconData>(
       label: 'Icon',
       options: type.sorted,
@@ -79,7 +79,7 @@ SampathIconData _iconKnob(BuildContext context, _IconType type) =>
 
 // Utility only: brand icons ignore color, so a states grid says nothing.
 SampathIconData _gridIconKnob(BuildContext context) =>
-    _iconKnob(context, _IconType.utility);
+    iconKnob(context, IconType.utility);
 
 SampathIconColor _colorKnob(BuildContext context) =>
     context.knobs.object.dropdown<SampathIconColor>(
@@ -228,3 +228,7 @@ class IconRegistry extends StatelessWidget {
     );
   }
 }
+
+/// Icon type + Icon knobs, for components with a swappable icon.
+SampathIconData pickIconKnobs(BuildContext context) =>
+    iconKnob(context, iconTypeKnob(context));

@@ -582,10 +582,10 @@ All node IDs are in the component file `Osc9AnJnbWQLesqVlhNsii`. Where a Figma n
 
 | # | Figma component | Page | Node | Code name | Depends on | Variants / properties | Status |
 |---|---|---|---|---|---|---|---|
-| 16 | `46px bg` | Icon sizes | `20:309` | `SampathIconBadge.medium` | `24px` | State (7) · octagon shape, 42 × 42 | ⬜ |
-| 17 | `68px bg` | Icon sizes | `20:369` | `SampathIconBadge.large` | `36px` | State (7) · octagon shape, 68 × 68 | ⬜ |
-| 18 | `Square Icon ` | Icon sizes | `71:4274` | `SampathSquareIcon` | `16/20/24/36px` | Size: XSmall/Small/Medium/Large · State: Brand/Success/Error/Warning/Info | ⬜ |
-| 19 | `Circle Icon` | Icon sizes | `624:4882` | `SampathCircleIcon` | `16px`, `24px` | Size: Small/Large | ⬜ |
+| 16 | `46px bg` | Icon sizes | `20:309` | `SampathIconBadge.medium` | `24px` | State (7) · octagon shape, 42 × 42 | ✅ |
+| 17 | `68px bg` | Icon sizes | `20:369` | `SampathIconBadge.large` | `36px` | State (7) · octagon shape, 68 × 68 | ✅ |
+| 18 | `Square Icon ` | Icon sizes | `71:4274` | `SampathSquareIcon` | `16/20/24/36px` | Size: XSmall/Small/Medium/Large · State: Brand/Success/Error/Warning/Info | ✅ |
+| 19 | `Circle Icon` | Icon sizes | `624:4882` | `SampathCircleIcon` | `16px`, `24px` | Size: Small/Large | ✅ |
 | 20 | `Base-Checkbox` | Checkbox | `42:185` | `SampathCheckboxBase` | `16px` | Type: Unselected/Selected/Indeterminate · State (runtime) | ⬜ |
 | 21 | `Tag-base` | Badge | `30:1454` | `SampathTagBase` | `16px` | Size: Small/Large · Leading/Trailing icon · Label | ⬜ |
 | 22 | `Label` | Text box | `28:968` | `SampathLabel` | Badge - indicator | Size: Medium/Small · Show badge · Label | ⬜ |
@@ -750,9 +750,26 @@ SampathIcon(
 | `46px bg` | 42 × 42 | Rounded **octagon** (brand shape) | `24px`, centered | Primary: `bg-icons` / `fg-brand` · Secondary: `bg-icons` / `fg-secondary` · Disabled: `bg-disabled` / `fg-disabled-on_bg` · Positive, Error, Info, Warning: `fg-success`, `fg-error`, `fg-info`, `fg-warning` background / `fg-inverse` icon |
 | `68px bg` | 68 × 68 | Rounded **octagon** | `36px`, centered | Same mapping as `46px bg` (its green state is called `Success`) |
 | `Square Icon` | 64 / 50 / 42 / 24 | Rounded square, radius `Radius-L` (Large) · `Radius-M` (Medium, Small) · `Radius-S` (XSmall) | 36 / 24 / 20 / 16 px | Brand: `bg-icons` / `fg-brand` · Success: `bg-success` / `fg-success` · Error: `bg-error` / `fg-error` · Warning: `bg-warning` / `fg-warning` · Info: `bg-info` / `fg-info` |
-| `Circle Icon` | 36 / 56 | Circle (`Radius-Full`) | 16 / 24 px | `bg-secondary` / `fg-brand` |
+| `Circle Icon` | 36 / 56 | Circle (`Radius-Full`), no shadow (§10 #19) | 16 / 24 px | `bg-secondary` / `fg-brand` |
 
 The **octagon** must be the exact Figma path. Export the mask vector from `46px bg` and draw it as a custom `ShapeBorder` or clip path. Don't approximate it with a rounded rectangle.
+
+**Containers built (12 Oct 2026).** `lib/components/icon_containers/`.
+
+```dart
+SampathIconBadge.medium(SampathIcons.wallet, state: SampathIconBadgeState.success) // 46px bg
+SampathIconBadge.large(SampathIcons.assistant)                                      // 68px bg
+SampathSquareIcon(SampathIcons.checkCircle,
+    size: SampathSquareIconSize.medium, state: SampathSquareIconState.success)
+SampathCircleIcon(SampathIcons.camera, size: SampathCircleIconSize.small)
+```
+
+- **Checked against Figma:** sizes, radius tokens, icon sizes, and background / icon color for every state match the table above. Icons are centered (§10 #20).
+- **Octagon:** `SampathOctagonBorder`, the `46px bg` mask vector (`20:313`) normalised to a unit square. The `68px bg` mask is the same shape scaled; a test checks the code path against the Figma 68 px path point by point. The whole octagon is filled (§10 #21).
+- **State names:** `SampathIconBadgeState` is `primary`, `secondary`, `disabled`, `success`, `error`, `info`, `warning`. `success` is `46px bg`'s `Positive` (§10 #8).
+- **Icon:** any registry icon, including brand icons and partner logos (they keep their own colors). `semanticLabel` passes through to the icon.
+- **Box sizes** (42, 68, 24/42/50/64, 36/56) are component sizes in the size enums, like `SampathIconSize`.
+- **Widgetbook:** Components → Icon Badge, Square Icon, Circle Icon. Each has a Default page with Icon type, Icon, Size and State knobs (Circle has no State) and a grid of every variant, in Light and Dark.
 
 ---
 
@@ -778,6 +795,9 @@ The **octagon** must be the exact Figma path. Export the mask vector from `46px 
 | 16 | Sinhala wraps tightly (1.5–1.8 px between lines) in Display/Large-H1, Display/Medium-H2, Title/XLarge and Button/XLarge, and small Sinhala (10–12 px) is hard to read. Accepted for now. Revisit if it shows up in real screens. | Typography (§3.4) | ⏳ |
 | 17 | Iconoir `xmark-solid` (used in Input field, Notification banners, Search) doesn't exist in `iconoir_flutter` 7.12.1. The closest is `XmarkCircleSolid` (same filled circle with an X; Figma's version is drawn as fill + 1 px stroke, so the X ends differ slightly). **Resolved:** it's the same icon, renamed `xmark-circle-solid` in newer Iconoir. `SampathIcons.xmarkSolid` uses `XmarkCircleSolid`. | Icons | ✅ Resolved (12 Oct 2026) |
 | 18 | Figma uses an older Iconoir library, so some icon names and drawings differ slightly from `iconoir_flutter` 7.12.1. Design may switch Figma to the current Iconoir library later. Code needs no change. (Note for design only.) | Icons | ⏳ |
+| 19 | `Circle Icon` (both sizes) uses effect style `Shadow/Resting_cards`. Decision: no shadow; code has none. | Icon sizes | 🔧 Fix in Figma (remove the shadow) |
+| 20 | `Square Icon` Large: the `36px` icon sits at y 13.6 instead of 14 (0.4 px above center). Code centers it. | Icon sizes | 🔧 Fix in Figma |
+| 21 | `46px bg` and `68px bg`: the `Background` frame is shifted 0.29 px left of the mask, leaving a 0.29 px unfilled sliver on the right edge. Code fills the whole octagon. | Icon sizes | 🔧 Fix in Figma |
 
 ---
 
@@ -793,3 +813,4 @@ The **octagon** must be the exact Figma path. Export the mask vector from `46px 
 | 12 Oct 2026 | 0.2 | Noto Sans Sinhala and Noto Sans Tamil (400–800) bundled and set as `fontFamilyFallback` on every text style (§3.4). Typography page gets English / Sinhala / Tamil samples. |
 | 12 Oct 2026 | 0.2 | §9.1 Icon built: `SampathIcon` (5 sizes, 7 states + other fg-*), `SampathIcons` registry (47 Iconoir icons used in Figma, 4 brand, 1 partner), brand/partner SVGs exported from Figma, Widgetbook Icon pages. `xmark-solid` pending (§10 #17). |
 | 12 Oct 2026 | 0.2 | §10 #17 resolved: `xmark-solid` added to the registry as `XmarkCircleSolid` (48 Iconoir icons). New §10 #18: Figma uses an older Iconoir library (note for design). Widgetbook Icon pages get an Icon type knob. |
+| 12 Oct 2026 | 0.2 | §8.2 #16–19 icon containers built: `SampathIconBadge` (`46px bg`, `68px bg`, exact Figma octagon), `SampathSquareIcon`, `SampathCircleIcon` (no shadow), with Widgetbook pages. New §10 #19–21 (Figma fixes). |
