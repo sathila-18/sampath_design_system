@@ -2331,7 +2331,7 @@
             "mode": {}
           }
         },
-        "Primary-900": {
+        "Primary1-900": {
           "$type": "color",
           "$value": "{Primitives.Colors.Orange.Orange-900}",
           "$description": "",
@@ -3080,7 +3080,7 @@
         "$extensions": {
           "mode": {
             "Light": "{Alias Colors.Colors.Primary1.Primary1-50}",
-            "Dark": "{Alias Colors.Colors.Primary1.Primary-900}"
+            "Dark": "{Alias Colors.Colors.Primary1.Primary1-900}"
           }
         }
       },
@@ -3267,7 +3267,7 @@
         "$extensions": {
           "mode": {
             "Light": "{Alias Colors.Colors.Primary1.Primary1-50}",
-            "Dark": "{Alias Colors.Colors.Primary1.Primary-900}"
+            "Dark": "{Alias Colors.Colors.Primary1.Primary1-900}"
           }
         }
       },
@@ -4481,7 +4481,7 @@
         "Alias Spacing & Radius",
         "Component collection"
       ],
-      "createdAt": "2026-10-12T04:31:12.699Z"
+      "createdAt": "2026-10-12T05:17:11.685Z"
     }
   }
 }
