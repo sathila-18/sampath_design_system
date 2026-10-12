@@ -129,7 +129,7 @@ _Collection `Color collection`, modes **Light** and **Dark**. **Components must 
 | `bg-tertiary` | Primary1-100 `#fcd5ba` | Primary1-700 `#ad5617` | Use this for info callout notification backgrounds |
 | `bg-neutral` | Primary2-500 `#f7f3ef` | Secondary-900 `#080809` | Use this for badge neutral background |
 | `bg-brand` | Primary1-500 `#f47921` | Primary1-500 `#f47921` | Use this for brand related backgrounds |
-| `bg-active` | Primary1-50 `#fde7d6` | Primary-900 `#66330e` | Use this color for active or selected state backgrounds |
+| `bg-active` | Primary1-50 `#fde7d6` | Primary1-900 `#66330e` | Use this color for active or selected state backgrounds |
 | `bg-active-hover` | Primary1-100 `#fcd5ba` | Primary1-800 `#864312` | Use this color for hover state of active or selected backgrounds |
 | `bg-action-primary` | Primary1-600 `#de6e1e` | Primary1-500 `#f47921` | Mainly use for primary button backgrounds |
 | `bg-action-primary_pressed` | Primary1-700 `#ad5617` | Primary1-700 `#ad5617` | Mainly use for pressed or hover states of primary button backgrounds |
@@ -146,7 +146,7 @@ _Collection `Color collection`, modes **Light** and **Dark**. **Components must 
 | `bg-warning` | Warning-100 `#f4dabf` | Warning-900 `#5d3915` | Use this for warning backgrounds. (notification, badge) |
 | `bg-info` | Tertiary-100 `#cdbff5` | Tertiary-900 `#27145e` | Use this for info backgrounds. (notification, badge) |
 | `bg-info_secondary` | Tertiary-50 `#efeafc` | Tertiary-800 `#341a7b` | Secondary color for info backgrounds. (notification, badge) |
-| `bg-icons` | Primary1-50 `#fde7d6` | Primary-900 `#66330e` | Use this for icon or avatar backgrounds |
+| `bg-icons` | Primary1-50 `#fde7d6` | Primary1-900 `#66330e` | Use this for icon or avatar backgrounds |
 | `bg-avatar` | Secondary-50 `#e8e8e8` | Secondary-900 `#080809` | Use this for avatar backgrounds with logos |
 | `bg-priority` | WarningSecondary-500 `#fbe1a6` | WarningSecondary-900 `#695f46` | Use this for priority banners |
 | `bg-gold` | WarningSecondary-400 `#fce7b8` | WarningSecondary-800 `#8a7c5b` | Use this for loyalty backgrounds |
@@ -549,10 +549,10 @@ All node IDs are in the component file `Osc9AnJnbWQLesqVlhNsii`. Where a Figma n
 
 | # | Task | Output | Status |
 |---|---|---|---|
-| S1 | Flutter package scaffold | `packages/sampath_ds/` | ⬜ |
-| S2 | Token generator: `tokens/design.tokens.json` → Dart (handles the quirks in §3.8) | `lib/tokens/` (generated) | ⬜ |
+| S1 | Flutter package scaffold | `packages/sampath_ds/` | ✅ |
+| S2 | Token generator: `tokens/design.tokens.json` → Dart (handles the quirks in §3.8) | `lib/tokens/` (generated) | ✅ |
 | S3 | Styles by hand from §4 (shadows, gradients). Motion (§5) is deferred. | `lib/tokens/styles.dart` | ⬜ |
-| S4 | Hanken Grotesk font files bundled (weights 400, 500, 600, 700, 800) | `assets/fonts/` | ⬜ |
+| S4 | Hanken Grotesk font files bundled (weights 400, 500, 600, 700, 800) | `assets/fonts/` | ✅ |
 | S5 | Widgetbook app with a Light/Dark switch, plus a Foundations page (colors, type, spacing, radius, shadows) | `widgetbook/` | ⬜ |
 
 ### 8.1 Atoms, level 0: contain no other components
@@ -740,7 +740,7 @@ The **octagon** must be the exact Figma path. Export the mask vector from `46px 
 
 | # | Item | Where | Status |
 |---|---|---|---|
-| 1 | Token `Primary-900` in the `Primary1` group should be `Primary1-900` (the other nine are renamed). Used by `bg-active` (Dark) and `bg-icons` (Dark). | Foundation › Alias Colors | 🔧 Fix in Figma |
+| 1 | Token `Primary-900` in the `Primary1` group should be `Primary1-900` (the other nine are renamed). Used by `bg-active` (Dark) and `bg-icons` (Dark). | Foundation › Alias Colors | ✅ Fixed (12 Oct 2026) |
 | 2 | `Vermilion` gradient uses off-brand `#f26722 → #dc5e1f` | Foundation › color styles | ⏳ Design to update later |
 | 3 | Gradient stops aren't linked to variables | Foundation › color styles | ⏳ Later |
 | 4 | Text style names (`Body/Large`) differ from variable groups (`Body L`). Mapped in §3.4. | Foundation | ⏳ Later |
@@ -764,3 +764,5 @@ The **octagon** must be the exact Figma path. Export the mask vector from `46px 
 |---|---|---|
 | 9 Oct 2026 | 0.1 | First draft: foundations, styles, icons, architecture, full component inventory, Icon sizes spec |
 | 12 Oct 2026 | 0.2 | Tokens re-exported: `header-to-content` 24 → 16, `section-gap` 32 → 24, new `section-gap_large` (32, not used yet). Added mobile spacing rules and the slot rule to Core rules. Motion deferred, with Material 3 motion as the planned direction. |
+| 12 Oct 2026 | 0.2 | Setup S1 (package scaffold), S2 (token generator `tool/generate_tokens.dart` → 6 files in `lib/tokens/`) and S4 (Hanken Grotesk 400–800 static TTFs from Google Fonts, OFL) done. |
+| 12 Oct 2026 | 0.2 | Tokens re-exported: alias `Primary-900` renamed to `Primary1-900` (§10 #1 fixed). No value changes. |
