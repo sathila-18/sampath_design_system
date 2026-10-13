@@ -132,6 +132,15 @@ String iconRef(SampathIconData icon) {
   return 'SampathIcons.$name';
 }
 
+/// A Dart string literal for [value], e.g. `'SD'`.
+String dartString(String value) {
+  final escaped = value
+      .replaceAll(r'\', r'\\')
+      .replaceAll("'", r"\'")
+      .replaceAll(r'$', r'\$');
+  return "'$escaped'";
+}
+
 /// A constructor call as dart format writes it: on one line when it fits
 /// in 80 characters, otherwise one argument per line with a trailing comma.
 /// Pass only the named arguments that differ from their defaults.

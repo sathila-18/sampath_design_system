@@ -1,6 +1,9 @@
 /// Sampath Bank mobile design system.
 library;
 
+export 'components/avatar/avatar_base.dart' show SampathAvatarSize;
+export 'components/avatar/sampath_avatar.dart';
+export 'components/avatar/sampath_brand_avatar.dart';
 export 'components/divider/sampath_divider.dart';
 export 'components/divider/sampath_divider_dash.dart';
 export 'components/icon_containers/sampath_circle_icon.dart';

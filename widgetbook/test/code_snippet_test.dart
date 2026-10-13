@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sampath_ds/sampath_ds.dart';
+import 'package:sampath_widgetbook/components/avatar_use_cases.dart';
 import 'package:sampath_widgetbook/components/divider_use_cases.dart';
 import 'package:sampath_widgetbook/components/icon_container_use_cases.dart';
 import 'package:sampath_widgetbook/components/icon_use_cases.dart';
@@ -128,6 +129,74 @@ void main() {
         ),
         'SampathSquareIcon(SampathIcons.insights, '
         'size: SampathSquareIconSize.small)',
+      );
+    });
+  });
+
+  group('dartString', () {
+    test('quotes and escapes', () {
+      expect(dartString('SD'), "'SD'");
+      expect(dartString("O'B"), r"'O\'B'");
+      expect(dartString(r'a$b\c'), r"'a\$b\\c'");
+    });
+  });
+
+  group('Avatar', () {
+    test('Icon type, defaults', () {
+      expect(avatarSnippet(AvatarShape.brand), 'SampathBrandAvatar()');
+      expect(avatarSnippet(AvatarShape.circle), 'SampathAvatar()');
+    });
+
+    test('Icon type ignores initials', () {
+      expect(
+        avatarSnippet(AvatarShape.brand, initials: 'SD'),
+        'SampathBrandAvatar()',
+      );
+    });
+
+    test('Text type with a non-default size', () {
+      expect(
+        avatarSnippet(
+          AvatarShape.circle,
+          type: AvatarType.text,
+          initials: 'SD',
+          size: SampathAvatarSize.xxxLarge,
+        ),
+        "SampathAvatar(initials: 'SD', size: SampathAvatarSize.xxxLarge)",
+      );
+    });
+
+    test('Text type with empty initials is the icon', () {
+      expect(
+        avatarSnippet(AvatarShape.brand, type: AvatarType.text),
+        'SampathBrandAvatar()',
+      );
+    });
+
+    test('Image type keeps the initials as fallback', () {
+      expect(
+        avatarSnippet(
+          AvatarShape.brand,
+          type: AvatarType.image,
+          initials: 'SD',
+        ),
+        "SampathBrandAvatar(image: NetworkImage(photoUrl), initials: 'SD')",
+      );
+    });
+
+    test('long call wraps', () {
+      expect(
+        avatarSnippet(
+          AvatarShape.brand,
+          type: AvatarType.image,
+          initials: 'SD',
+          size: SampathAvatarSize.xSmall,
+        ),
+        'SampathBrandAvatar(\n'
+        '  image: NetworkImage(photoUrl),\n'
+        "  initials: 'SD',\n"
+        '  size: SampathAvatarSize.xSmall,\n'
+        ')',
       );
     });
   });

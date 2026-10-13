@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:widgetbook/widgetbook.dart';
 
+import 'components/avatar_use_cases.dart';
 import 'components/divider_use_cases.dart';
 import 'components/icon_container_use_cases.dart';
 import 'components/icon_use_cases.dart';
@@ -71,6 +72,7 @@ class SampathWidgetbook extends StatelessWidget {
             iconComponent(),
             ...iconContainerComponents(),
             ...dividerComponents(),
+            ...avatarComponents(),
           ],
         ),
       ],

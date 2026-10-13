@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sampath_ds/sampath_ds.dart';
+import 'package:sampath_widgetbook/components/avatar_use_cases.dart';
 import 'package:sampath_widgetbook/components/icon_use_cases.dart';
 import 'package:sampath_widgetbook/foundations/colors_page.dart';
 import 'package:sampath_widgetbook/foundations/gradients_page.dart';
@@ -26,6 +27,8 @@ void main() {
     'Gradients': const GradientsPage(),
     'Icon grid': const IconSizeStateGrid(icon: SampathIcons.lock),
     'Icon registry': const IconRegistry(),
+    'Brand avatar grid': const AvatarGrid(shape: AvatarShape.brand),
+    'Avatar grid': const AvatarGrid(shape: AvatarShape.circle),
   };
   final themes = {'Light': CatalogueTheme.light, 'Dark': CatalogueTheme.dark};
 
