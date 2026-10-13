@@ -213,11 +213,26 @@ void main() {
         expect(tester.takeException(), isNull);
         expect(find.text(code), findsOneWidget);
         expect(
+          // The font the text is actually laid out with, after SelectableText
+          // merges our style into the theme's DefaultTextStyle.
           tester
-              .widget<SelectableText>(find.byType(SelectableText))
+              .widget<EditableText>(find.byType(EditableText))
               .style
-              ?.fontFamily,
+              .fontFamily,
           'RobotoMono',
+        );
+
+        // No soft wrap: the text sits in a horizontal scroll view.
+        expect(
+          find.ancestor(
+            of: find.byType(SelectableText),
+            matching: find.byWidgetPredicate(
+              (w) =>
+                  w is SingleChildScrollView &&
+                  w.scrollDirection == Axis.horizontal,
+            ),
+          ),
+          findsOneWidget,
         );
 
         await tester.tap(find.text('Copy'));
