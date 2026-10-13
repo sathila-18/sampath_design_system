@@ -3,6 +3,7 @@ library;
 
 export 'components/avatar/avatar_base.dart' show SampathAvatarSize;
 export 'components/avatar/sampath_avatar.dart';
+export 'components/avatar/sampath_avatar_group.dart';
 export 'components/avatar/sampath_brand_avatar.dart';
 export 'components/divider/sampath_divider.dart';
 export 'components/divider/sampath_divider_dash.dart';

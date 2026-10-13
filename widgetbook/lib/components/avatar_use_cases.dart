@@ -6,10 +6,12 @@ import '../foundations/foundation_page.dart';
 import '../shared/code_snippet.dart';
 import '../shared/variant_grid.dart';
 
-/// Use cases for `SampathBrandAvatar` and `SampathAvatar` (DESIGN.md §9.3).
+/// Use cases for `SampathBrandAvatar` and `SampathAvatar` (DESIGN.md §9.3)
+/// and `SampathAvatarGroup` (§9.4).
 List<WidgetbookComponent> avatarComponents() => [
   _component(AvatarShape.brand),
   _component(AvatarShape.circle),
+  _groupComponent(),
 ];
 
 /// The two mapped avatars.
@@ -143,3 +145,130 @@ class AvatarGrid extends StatelessWidget {
 
 String _sizeLabel(SampathAvatarSize s) =>
     '${s.name} · ${s.dimension.toInt()}px';
+
+/// Five faces from the Figma `Avatar Group` image fills, cropped square to
+/// the face (Widgetbook only), in an order where neighbors differ.
+const _groupFaces = [
+  SampathAvatarEntry(
+    image: AssetImage('assets/images/avatar_group_1.jpg'),
+    initials: 'NP',
+  ),
+  SampathAvatarEntry(
+    image: AssetImage('assets/images/avatar_group_2.jpg'),
+    initials: 'AR',
+  ),
+  SampathAvatarEntry(image: sampleAvatarPhoto, initials: 'SD'),
+  SampathAvatarEntry(
+    image: AssetImage('assets/images/avatar_group_4.jpg'),
+    initials: 'KF',
+  ),
+  SampathAvatarEntry(
+    image: AssetImage('assets/images/avatar_group_3.jpg'),
+    initials: 'MH',
+  ),
+];
+
+/// Sample people for the group previews, cycling through the faces.
+List<SampathAvatarEntry> samplePeople(int count) => [
+  for (var i = 0; i < count; i++) _groupFaces[i % _groupFaces.length],
+];
+
+/// "1 person" / "8 people".
+String peopleLabel(int count) => count == 1 ? '1 person' : '$count people';
+
+/// The `SampathAvatarGroup(...)` call, default size left out. `people`
+/// stands for the developer's list of `SampathAvatarEntry`.
+String avatarGroupSnippet({
+  required int count,
+  SampathAvatarGroupSize size = SampathAvatarGroupSize.medium,
+}) => dartCall('SampathAvatarGroup', const [], {
+  'avatars': 'people',
+  if (size != SampathAvatarGroupSize.medium)
+    'size': 'SampathAvatarGroupSize.${size.name}',
+  'semanticLabel': dartString(peopleLabel(count)),
+});
+
+WidgetbookComponent _groupComponent() => WidgetbookComponent(
+  name: 'Avatar Group',
+  useCases: [
+    WidgetbookUseCase(
+      name: 'Default',
+      builder: (context) {
+        final size = context.knobs.object.dropdown<SampathAvatarGroupSize>(
+          label: 'Size',
+          options: SampathAvatarGroupSize.values,
+          initialOption: SampathAvatarGroupSize.medium,
+          labelBuilder: _groupSizeLabel,
+        );
+        final count = context.knobs.int.slider(
+          label: 'Number of people',
+          description: 'Over 7: the first 6, then +N',
+          // Figma's Count=7 sample: 6 avatars and "+4".
+          initialValue: 10,
+          min: 1,
+          max: 20,
+        );
+        return PreviewWithCode(
+          code: avatarGroupSnippet(count: count, size: size),
+          preview: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SampathAvatarGroup(
+                avatars: samplePeople(count),
+                size: size,
+                semanticLabel: peopleLabel(count),
+              ),
+              const SizedBox(height: SampathSpacing.l),
+              TokenLabel(
+                'Avatar Group',
+                '${_groupSizeLabel(size)} · ${peopleLabel(count)}',
+              ),
+            ],
+          ),
+        );
+      },
+    ),
+    WidgetbookUseCase(
+      name: 'Sizes × people',
+      builder: (context) => const AvatarGroupGrid(),
+    ),
+  ],
+);
+
+/// Every Figma `Avatar Group` variant (3 sizes × 2, 3, 5, 7 people), plus
+/// 10 people to show the "+N" spot as in Figma's Count=7 sample.
+class AvatarGroupGrid extends StatelessWidget {
+  const AvatarGroupGrid({super.key});
+
+  static const counts = [2, 3, 5, 7, 10];
+
+  @override
+  Widget build(BuildContext context) => VariantGrid(
+    title: 'Avatar Group · sizes × people',
+    source: 'Figma Avatar Group (14:1155), sizes as columns',
+    // Fits the 320 px XLarge × 7.
+    columnWidth: SampathSpacing.x12l,
+    columns: [
+      for (final s in SampathAvatarGroupSize.values) _groupSizeLabel(s),
+    ],
+    rows: [
+      for (final count in counts)
+        (
+          count > SampathAvatarGroup.maxSpots
+              ? '${peopleLabel(count)} (6 + "+N")'
+              : peopleLabel(count),
+          [
+            for (final size in SampathAvatarGroupSize.values)
+              SampathAvatarGroup(
+                avatars: samplePeople(count),
+                size: size,
+                semanticLabel: peopleLabel(count),
+              ),
+          ],
+        ),
+    ],
+  );
+}
+
+String _groupSizeLabel(SampathAvatarGroupSize s) =>
+    '${s.name} · ${s.avatarSize.dimension.toInt()}px';
