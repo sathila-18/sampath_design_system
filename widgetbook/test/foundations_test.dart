@@ -29,6 +29,7 @@ void main() {
     'Icon registry': const IconRegistry(),
     'Brand avatar grid': const AvatarGrid(shape: AvatarShape.brand),
     'Avatar grid': const AvatarGrid(shape: AvatarShape.circle),
+    'Avatar Group grid': const AvatarGroupGrid(),
   };
   final themes = {'Light': CatalogueTheme.light, 'Dark': CatalogueTheme.dark};
 

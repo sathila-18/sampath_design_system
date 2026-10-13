@@ -622,7 +622,7 @@ All node IDs are in the component file `Osc9AnJnbWQLesqVlhNsii`. Where a Figma n
 | 40 | `Indicator set` | Indicator | `98:3541` | `SampathPageIndicator` | **Indicator** | ⬜ |
 | 41 | `Progress-progress bar` | Progress | `31:2122` | `SampathProgress` | **Progress bar**, Text Box | ⬜ |
 | 42 | `Progress-Spinner` | Progress | `33:2348` | `SampathProgressSpinner` | **Spinner**, Text Box | ⬜ |
-| 43 | `Avatar Group` | Avatar | `14:1155` | `SampathAvatarGroup` | **Brand avatar** | ⬜ |
+| 43 | `Avatar Group` | Avatar | `14:1155` | `SampathAvatarGroup` | **Brand avatar** | ✅ |
 | 44 | `Profile image` | Avatar | `432:1610` | `SampathProfileImage` | **Brand avatar**, icons | ⬜ |
 | 45 | `Quick action- base` | Buttons | `366:7429` | `SampathQuickActionBase` | Circle Icon, Label | ⬜ |
 | 46 | `Contry selecter` | Input field | `49:5731` | `SampathCountrySelector` | Flag sizes, `24px` | ⬜ |
@@ -808,7 +808,7 @@ SampathDividerDash()
 
 ### 9.3 Brand avatar and Avatar (Avatar)
 
-**Figma:** page **Avatar**. `Brand avatar` (`20:962`), the main avatar, on the brand octagon, and `Avatar` (`932:1387`), the secondary one, on a circle. Both have `Type` = Image / Icon / Text and 7 sizes. Avatar Group, Profile image and Online Indicator are separate components, not built yet.
+**Figma:** page **Avatar**. `Brand avatar` (`20:962`), the main avatar, on the brand octagon, and `Avatar` (`932:1387`), the secondary one, on a circle. Both have `Type` = Image / Icon / Text and 7 sizes. Avatar Group (§9.4) is built on `Brand avatar`. Profile image and Online Indicator are separate components, not built yet.
 
 | Figma `Size` | `SampathAvatarSize` | Box | Icon (`user`) | Initials style |
 |---|---|---|---|---|
@@ -853,6 +853,44 @@ SampathAvatar(initials: 'SD', size: SampathAvatarSize.small)        // same API,
 - **Checked against Figma:** box sizes, icon sizes, text styles, colors (Light and Dark tokens), outline and photo crop for all 7 sizes × 3 types. Octagon path compared with every Figma `Brand avatar` vector in a test.
 - **Widgetbook:** Components → Brand avatar and Avatar. Each has a Default page (Type, Size, Initials knobs, live code box) and Sizes × types, Light and Dark. The sample photo is the Figma image fill, in `widgetbook/assets/images/` only.
 
+### 9.4 Avatar Group (Avatar)
+
+**Figma:** page **Avatar**, `Avatar Group` (`14:1155`). A row of overlapping `Brand avatar` instances. `Size` = XSmall / Medium / XLarge, `Count` = 2 / 3 / 5 / 7.
+
+| Figma `Size` | `SampathAvatarGroupSize` | Avatar | Overlap | Width at 2 / 3 / 5 / 7 |
+|---|---|---|---|---|
+| `XSmall` | `xSmall` | `Xsmall` (24) | 4 (`Space-XS`) | 44 / 64 / 104 / 144 |
+| `Medium` | `medium` (default) | `Medium` (40) | 8 (`Space-M`) | 72 / 104 / 168 / 232 |
+| `XLarge` | `xLarge` | `XLarge` (56) | 12 (`Space-L`) | 100 / 144 / 232 / 320 |
+
+**API**
+
+```dart
+SampathAvatarGroup(
+  avatars: [
+    SampathAvatarEntry(image: NetworkImage(photoUrl), initials: 'SD'),
+    SampathAvatarEntry(initials: 'AK'),
+    SampathAvatarEntry(), // user icon
+  ],
+  size: SampathAvatarGroupSize.xLarge,
+  semanticLabel: '3 people',
+)
+```
+
+**Built (13 Oct 2026).** `lib/components/avatar/sampath_avatar_group.dart`.
+
+- **Built from `SampathBrandAvatar` (§7.2).** Each spot is a `SampathBrandAvatar`; the group only positions them and copies none of the avatar's layout or styling.
+- **Entries:** `SampathAvatarEntry` takes the same content as `SampathBrandAvatar` (`image`, `initials`), so each spot follows the same type rules and loading fallback (§9.3).
+- **Count isn't a parameter.** It follows the list length. Up to 7 spots (`SampathAvatarGroup.maxSpots`, Figma's largest variant). With more than 7 people, the first 6 show and the 7th spot is a Text brand avatar with `+N` (N = people not shown). Figma's `+4` is sample text.
+- **Overlap:** each avatar starts `avatar − overlap` after the previous one, and later avatars paint on top of earlier ones, as in Figma's auto layout. Figma's negative gap isn't bound to a variable; the values equal `Space-XS`/`Space-M`/`Space-L` and code uses those tokens (§10 #25).
+- **Width** is exactly Figma's (`n × avatar − (n − 1) × overlap`). The brand outline still draws its 0.5 px outside the box (§10 #23), so the group doesn't clip.
+- **Long counts:** `+N` uses the avatar's initials style, so `+100` and more may not fit in the 24 px `xSmall` octagon and gets clipped by its shape. Figma only shows `+4`.
+- **Empty list:** renders nothing.
+- **Semantics:** with `semanticLabel` (for example "8 people"), one node for the whole group; the avatars and `+N` aren't read separately. Without it, decorative.
+- **Checked against Figma:** avatar sizes, overlaps, widths of all 12 variants (in a test), stacking order and the `+N` spot (Text brand avatar, `text-secondary` on `bg-secondary`), Light and Dark.
+- **Figma differs:** `Count=3` shows 2 photos and `+4`, and `Count=7` shows 6 photos and `+4`, while `Count=2` and `Count=5` show only photos (§10 #26). Code follows the rule above: 3 or 7 people show 3 or 7 avatars.
+- **Widgetbook:** Components → Avatar Group. Default page (Size and Number of people knobs, live code box) and Sizes × people (every Figma variant, plus 10 people to show `6 + "+4"` like Figma's sample), Light and Dark. Sizes are columns so the grid fits. Every spot uses the one Figma sample photo; Figma uses several.
+
 ---
 
 ## 10. Known issues and open decisions
@@ -883,6 +921,8 @@ SampathAvatar(initials: 'SD', size: SampathAvatarSize.small)        // same API,
 | 22 | `Brand avatar` and `Avatar`: the 1 px `border-subtle` stroke weight isn't bound to a variable, and Figma has no border-width tokens. **Resolved:** code-only style `SampathBorderWidth.thin` = 1 in `styles.dart` (§4.5). | Avatar | ✅ Resolved (13 Oct 2026) |
 | 23 | `Brand avatar` strokes its outline centered on the edge (half outside, so it draws 25 × 25 at 24), while `Avatar` draws its border inside the box. Code matches each. | Avatar | 🔧 Align in Figma (pick one) |
 | 24 | Off-center layers: `Avatar` Xsmall icon (x 3.71 instead of 4) and initials (0.21 px right); several `Brand avatar` initials are 0.5 px right (`left: 50% + 0.5px`). Code centers them. | Avatar | 🔧 Fix in Figma |
+| 25 | `Avatar Group`: the overlap (negative item spacing −4 / −8 / −12) isn't bound to a variable. Values equal `Space-XS` / `Space-M` / `Space-L`, which code uses. | Avatar Group | 🔧 Bind in Figma |
+| 26 | `Avatar Group`: the last spot is `+4` in `Count=3` and `Count=7` but a photo in `Count=2` and `Count=5`. Code shows `+N` only for more than 7 people. | Avatar Group | 🔧 Align in Figma |
 
 ---
 
@@ -904,3 +944,4 @@ SampathAvatar(initials: 'SD', size: SampathAvatarSize.small)        // same API,
 | 13 Oct 2026 | 0.2 | Widgetbook code box uses Roboto Mono Regular, bundled in the widgetbook app only (OFL, `widgetbook/assets/fonts/`), because Flutter web can't use system monospace fonts. |
 | 13 Oct 2026 | 0.2 | §8.2 #29–30 avatars built: `SampathBrandAvatar` (octagon, reuses `SampathOctagonBorder`) and `SampathAvatar` (circle) on a shared `AvatarBase`, type from content with initials or icon fallback while a photo loads or fails. Widgetbook pages with code boxes and Sizes × types grids. New §10 #22–24. |
 | 13 Oct 2026 | 0.2 | §4.5 Border widths added as a code-only style: `SampathBorderWidth.thin` (1), used by the avatar outlines (§10 #22 resolved). |
+| 13 Oct 2026 | 0.2 | §8.3 #43 Avatar Group built: `SampathAvatarGroup` from `SampathBrandAvatar` (3 sizes, overlaps `Space-XS`/`M`/`L`, up to 7 spots, `+N` beyond), with Widgetbook Default (code box) and Sizes × people pages. New §10 #25–26. |

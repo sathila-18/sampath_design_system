@@ -314,4 +314,28 @@ void main() {
       });
     }
   });
+
+  group('Avatar Group', () {
+    test('default size, label', () {
+      expect(
+        avatarGroupSnippet(count: 8),
+        "SampathAvatarGroup(avatars: people, semanticLabel: '8 people')",
+      );
+    });
+
+    test('one person', () {
+      expect(peopleLabel(1), '1 person');
+    });
+
+    test('non-default size wraps', () {
+      expect(
+        avatarGroupSnippet(count: 10, size: SampathAvatarGroupSize.xLarge),
+        'SampathAvatarGroup(\n'
+        '  avatars: people,\n'
+        '  size: SampathAvatarGroupSize.xLarge,\n'
+        "  semanticLabel: '10 people',\n"
+        ')',
+      );
+    });
+  });
 }
