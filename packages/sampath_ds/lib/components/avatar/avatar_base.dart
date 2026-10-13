@@ -4,6 +4,7 @@ import '../../icons/sampath_icon.dart';
 import '../../icons/sampath_icons.dart';
 import '../../tokens/sampath_colors.dart';
 import '../../tokens/sampath_typography.dart';
+import '../../tokens/styles.dart';
 
 /// Figma `Size` of `Brand avatar` and `Avatar` (DESIGN.md §9.3).
 ///
@@ -38,11 +39,6 @@ enum SampathAvatarSize {
 
   /// Initials style, colored `text-secondary`.
   final TextStyle textStyle;
-
-  /// Figma stroke weight of the `border-subtle` outline, every size and
-  /// type. Not bound to a token in Figma (DESIGN.md §10 #22), so it's a
-  /// component size, like the box sizes.
-  static const double borderWidth = 1;
 }
 
 /// Shared body of `SampathBrandAvatar` and `SampathAvatar`: everything but
@@ -78,7 +74,7 @@ class AvatarBase extends StatelessWidget {
     final outline = shape.copyWith(
       side: BorderSide(
         color: colors.borderSubtle,
-        width: SampathAvatarSize.borderWidth,
+        width: SampathBorderWidth.thin,
         strokeAlign: strokeAlign,
       ),
     );

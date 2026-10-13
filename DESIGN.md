@@ -394,6 +394,14 @@ There are 23 styles, all linked to `Alias Typography` variables. Names and value
 
 The app is mobile only. `Desktop-lg` is recorded for reference and isn't used in the Flutter package.
 
+### 4.5 Border widths (code-only)
+
+Figma has no variable or style for stroke weight, so this is a **code-only** style in `styles.dart`, recording the weights Figma's components use. Add a width only when a component in Figma uses it.
+
+| Code | Value | Used by |
+|---|---|---|
+| `SampathBorderWidth.thin` | 1 | `Brand avatar`, `Avatar` outlines |
+
 ---
 
 ## 5. Motion
@@ -836,7 +844,7 @@ SampathAvatar(initials: 'SD', size: SampathAvatarSize.small)        // same API,
 - **Type isn't a parameter.** It follows the content: `image` → Image; no image, non-empty `initials` → Text; neither → Icon.
 - **Loading and errors:** while the photo loads, or if it fails, the avatar shows the initials, or the icon if there are none. It's never blank or broken.
 - **Initials** are shown exactly as passed (no casing, no trimming, not worked out from a name). They don't grow with the OS text scale, because the box is fixed.
-- **Border width** (1 px) isn't bound to a token in Figma. It's `SampathAvatarSize.borderWidth`, a component size like the box sizes (§10 #22).
+- **Border width** (1 px) isn't bound to a variable in Figma. It's `SampathBorderWidth.thin`, a code-only style (§4.5, §10 #22).
 - **Stroke alignment** follows Figma, which differs between the two (§10 #23).
 - **Centering:** content is centered. A few Figma text and icon layers sit up to 0.5 px off center (§10 #24).
 - **Default size** is `medium` (40). Figma's first variant is `Xsmall`, but a 24 px default isn't a useful default in code.
@@ -872,7 +880,7 @@ SampathAvatar(initials: 'SD', size: SampathAvatarSize.small)        // same API,
 | 19 | `Circle Icon` (both sizes) uses effect style `Shadow/Resting_cards`. Decision: no shadow; code has none. | Icon sizes | 🔧 Fix in Figma (remove the shadow) |
 | 20 | `Square Icon` Large: the `36px` icon sits at y 13.6 instead of 14 (0.4 px above center). Code centers it. | Icon sizes | 🔧 Fix in Figma |
 | 21 | `46px bg` and `68px bg`: the `Background` frame is shifted 0.29 px left of the mask, leaving a 0.29 px unfilled sliver on the right edge. Code fills the whole octagon. | Icon sizes | 🔧 Fix in Figma |
-| 22 | `Brand avatar` and `Avatar`: the 1 px `border-subtle` stroke weight isn't bound to a variable, and there are no border-width tokens. Code uses the component constant `SampathAvatarSize.borderWidth`. | Avatar | ⏳ Design may add a border-width token |
+| 22 | `Brand avatar` and `Avatar`: the 1 px `border-subtle` stroke weight isn't bound to a variable, and Figma has no border-width tokens. **Resolved:** code-only style `SampathBorderWidth.thin` = 1 in `styles.dart` (§4.5). | Avatar | ✅ Resolved (13 Oct 2026) |
 | 23 | `Brand avatar` strokes its outline centered on the edge (half outside, so it draws 25 × 25 at 24), while `Avatar` draws its border inside the box. Code matches each. | Avatar | 🔧 Align in Figma (pick one) |
 | 24 | Off-center layers: `Avatar` Xsmall icon (x 3.71 instead of 4) and initials (0.21 px right); several `Brand avatar` initials are 0.5 px right (`left: 50% + 0.5px`). Code centers them. | Avatar | 🔧 Fix in Figma |
 
@@ -895,3 +903,4 @@ SampathAvatar(initials: 'SD', size: SampathAvatarSize.small)        // same API,
 | 13 Oct 2026 | 0.2 | §9.2 Divider built: `SampathDivider` (Divider, Section Divider) and `SampathDividerDash` (line inset 0.5 px like Figma), with Widgetbook pages and code boxes. |
 | 13 Oct 2026 | 0.2 | Widgetbook code box uses Roboto Mono Regular, bundled in the widgetbook app only (OFL, `widgetbook/assets/fonts/`), because Flutter web can't use system monospace fonts. |
 | 13 Oct 2026 | 0.2 | §8.2 #29–30 avatars built: `SampathBrandAvatar` (octagon, reuses `SampathOctagonBorder`) and `SampathAvatar` (circle) on a shared `AvatarBase`, type from content with initials or icon fallback while a photo loads or fails. Widgetbook pages with code boxes and Sizes × types grids. New §10 #22–24. |
+| 13 Oct 2026 | 0.2 | §4.5 Border widths added as a code-only style: `SampathBorderWidth.thin` (1), used by the avatar outlines (§10 #22 resolved). |

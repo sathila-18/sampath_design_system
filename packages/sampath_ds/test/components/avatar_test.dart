@@ -233,7 +233,8 @@ void main() {
         final outline = _outline(t).shape as OutlinedBorder;
         expect(outline.runtimeType, shape);
         expect(outline.side.color, SampathColors.light.borderSubtle);
-        expect(outline.side.width, SampathAvatarSize.borderWidth);
+        expect(outline.side.width, SampathBorderWidth.thin);
+        expect(SampathBorderWidth.thin, 1);
         expect(outline.side.strokeAlign, align);
       });
 

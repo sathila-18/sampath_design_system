@@ -11,6 +11,13 @@ import 'package:flutter/widgets.dart';
 
 import 'sampath_palette.dart';
 
+/// Border widths. DESIGN.md §4.5. Code-only: Figma has no variable for
+/// stroke weight, so these are the weights its components use.
+abstract final class SampathBorderWidth {
+  /// 1 px: avatar outlines (`Brand avatar`, `Avatar`).
+  static const double thin = 1;
+}
+
 /// Effect styles (`Shadow/*`). DESIGN.md §4.3.
 ///
 /// Figma's shadow **blur** maps to [BoxShadow.blurRadius] directly. Shadows
