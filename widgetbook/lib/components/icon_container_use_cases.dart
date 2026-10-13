@@ -3,6 +3,7 @@ import 'package:sampath_ds/sampath_ds.dart';
 import 'package:widgetbook/widgetbook.dart';
 
 import '../foundations/foundation_page.dart';
+import '../shared/code_snippet.dart';
 import 'icon_use_cases.dart';
 
 /// Use cases for the icon containers (DESIGN.md §9.1, §8.2 #16–19).
@@ -27,6 +28,7 @@ List<WidgetbookComponent> iconContainerComponents() => [
           return _Single(
             name: large ? '68px bg' : '46px bg',
             detail: state.name,
+            code: iconBadgeSnippet(icon, large: large, state: state),
             child: large
                 ? SampathIconBadge.large(icon, state: state)
                 : SampathIconBadge.medium(icon, state: state),
@@ -83,6 +85,7 @@ List<WidgetbookComponent> iconContainerComponents() => [
           return _Single(
             name: 'Square Icon',
             detail: '${size.name} · ${state.name}',
+            code: squareIconSnippet(icon, size: size, state: state),
             child: SampathSquareIcon(icon, size: size, state: state),
           );
         },
@@ -126,6 +129,7 @@ List<WidgetbookComponent> iconContainerComponents() => [
           return _Single(
             name: 'Circle Icon',
             detail: size.name,
+            code: circleIconSnippet(icon, size: size),
             child: SampathCircleIcon(icon, size: size),
           );
         },
@@ -154,20 +158,66 @@ List<WidgetbookComponent> iconContainerComponents() => [
   ),
 ];
 
+/// The `SampathIconBadge.medium/.large(...)` call, defaults left out.
+String iconBadgeSnippet(
+  SampathIconData icon, {
+  bool large = false,
+  SampathIconBadgeState state = SampathIconBadgeState.primary,
+}) => dartCall(
+  large ? 'SampathIconBadge.large' : 'SampathIconBadge.medium',
+  [iconRef(icon)],
+  {
+    if (state != SampathIconBadgeState.primary)
+      'state': 'SampathIconBadgeState.${state.name}',
+  },
+);
+
+/// The `SampathSquareIcon(...)` call, defaults left out.
+String squareIconSnippet(
+  SampathIconData icon, {
+  SampathSquareIconSize size = SampathSquareIconSize.medium,
+  SampathSquareIconState state = SampathSquareIconState.brand,
+}) => dartCall(
+  'SampathSquareIcon',
+  [iconRef(icon)],
+  {
+    if (size != SampathSquareIconSize.medium)
+      'size': 'SampathSquareIconSize.${size.name}',
+    if (state != SampathSquareIconState.brand)
+      'state': 'SampathSquareIconState.${state.name}',
+  },
+);
+
+/// The `SampathCircleIcon(...)` call, defaults left out.
+String circleIconSnippet(
+  SampathIconData icon, {
+  SampathCircleIconSize size = SampathCircleIconSize.large,
+}) => dartCall(
+  'SampathCircleIcon',
+  [iconRef(icon)],
+  {
+    if (size != SampathCircleIconSize.large)
+      'size': 'SampathCircleIconSize.${size.name}',
+  },
+);
+
 class _Single extends StatelessWidget {
   const _Single({
     required this.name,
     required this.detail,
+    required this.code,
     required this.child,
   });
 
   final String name;
   final String detail;
+  final String code;
   final Widget child;
 
   @override
-  Widget build(BuildContext context) => Center(
-    child: Column(
+  Widget build(BuildContext context) => PreviewWithCode(
+    code: code,
+    preview: Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         child,

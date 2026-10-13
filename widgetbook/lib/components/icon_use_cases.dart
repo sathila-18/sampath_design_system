@@ -3,6 +3,7 @@ import 'package:sampath_ds/sampath_ds.dart';
 import 'package:widgetbook/widgetbook.dart';
 
 import '../foundations/foundation_page.dart';
+import '../shared/code_snippet.dart';
 
 /// Use cases for `SampathIcon` (DESIGN.md §9.1).
 WidgetbookComponent iconComponent() => WidgetbookComponent(
@@ -89,6 +90,22 @@ SampathIconColor _colorKnob(BuildContext context) =>
       labelBuilder: (c) => c.name,
     );
 
+/// The `SampathIcon(...)` call for these values, defaults left out.
+/// Brand icons ignore color, so it's never shown for them.
+String iconSnippet(
+  SampathIconData icon, {
+  SampathIconSize size = SampathIconSize.s24,
+  SampathIconColor color = SampathIconColor.primary,
+}) => dartCall(
+  'SampathIcon',
+  [iconRef(icon)],
+  {
+    if (size != SampathIconSize.s24) 'size': 'SampathIconSize.${size.name}',
+    if (icon is SampathUtilityIcon && color != SampathIconColor.primary)
+      'color': 'SampathIconColor.${color.name}',
+  },
+);
+
 class _SingleIcon extends StatelessWidget {
   const _SingleIcon({
     required this.icon,
@@ -103,8 +120,9 @@ class _SingleIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isAsset = icon is SampathAssetIcon;
-    return Center(
-      child: Column(
+    return PreviewWithCode(
+      code: iconSnippet(icon, size: size, color: color),
+      preview: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           SampathIcon(icon, size: size, color: color),
