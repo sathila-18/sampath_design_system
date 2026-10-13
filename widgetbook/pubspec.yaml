@@ -59,6 +59,11 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
+  # Sample avatar photo, exported from the Figma Avatar image fill
+  # (Unsplash photo v2aKnjMbP_k). Widgetbook only.
+  assets:
+    - assets/images/avatar_sample.jpg
+
   # Code box font (widgetbook only). Roboto Mono, OFL: assets/fonts/RobotoMono-OFL.txt
   fonts:
     - family: RobotoMono

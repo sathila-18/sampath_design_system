@@ -43,6 +43,7 @@ Instructions for Claude Code in this repo. Read them fully at the start of every
 - **Respect Reduce motion** (`MediaQuery.disableAnimationsOf`).
 - **Names:** code names follow `DESIGN.md` §8. Where a Figma name has a typo, use the corrected spelling in code and leave the Figma name as it is in `DESIGN.md`.
 - **Figma is read-only.** Never create, edit, rename or delete anything in the Figma files. Only read and screenshot. If something in Figma needs changing, tell the designer.
+- **When deleting files in shell commands, always use a literal path or "${VAR:?}"** so the command fails safely if the variable is empty.
 - **Out of scope:** pages under "🔒 Do not use" in the component file, and the "Icon library" page in the iconography file.
 
 ## When to stop and ask

@@ -4,6 +4,7 @@ import 'package:widgetbook/widgetbook.dart';
 
 import '../foundations/foundation_page.dart';
 import '../shared/code_snippet.dart';
+import '../shared/variant_grid.dart';
 import 'icon_use_cases.dart';
 
 /// Use cases for the icon containers (DESIGN.md §9.1, §8.2 #16–19).
@@ -39,7 +40,7 @@ List<WidgetbookComponent> iconContainerComponents() => [
         name: 'Sizes × states',
         builder: (context) {
           final icon = pickIconKnobs(context);
-          return _Grid(
+          return VariantGrid(
             title: 'Icon Badge · sizes × states',
             source: 'Figma 46px bg (20:309), 68px bg (20:369)',
             columns: [for (final s in SampathIconBadgeState.values) s.name],
@@ -94,7 +95,7 @@ List<WidgetbookComponent> iconContainerComponents() => [
         name: 'Sizes × states',
         builder: (context) {
           final icon = pickIconKnobs(context);
-          return _Grid(
+          return VariantGrid(
             title: 'Square Icon · sizes × states',
             source: 'Figma Square Icon (71:4274)',
             columns: [for (final s in SampathSquareIconState.values) s.name],
@@ -138,7 +139,7 @@ List<WidgetbookComponent> iconContainerComponents() => [
         name: 'Sizes',
         builder: (context) {
           final icon = pickIconKnobs(context);
-          return _Grid(
+          return VariantGrid(
             title: 'Circle Icon · sizes',
             source: 'Figma Circle Icon (624:4882)',
             columns: [for (final s in SampathCircleIconSize.values) s.name],
@@ -226,67 +227,4 @@ class _Single extends StatelessWidget {
       ],
     ),
   );
-}
-
-class _Grid extends StatelessWidget {
-  const _Grid({
-    required this.title,
-    required this.source,
-    required this.columns,
-    required this.rows,
-  });
-
-  final String title;
-  final String source;
-  final List<String> columns;
-  final List<(String, List<Widget>)> rows;
-
-  @override
-  Widget build(BuildContext context) {
-    final caption = SampathTextStyles.captionLarge.copyWith(
-      color: context.colors.textSecondary,
-    );
-    return FoundationPage(
-      title: title,
-      source: '$source · switch Light / Dark with the Theme addon',
-      sections: [
-        FoundationSection(
-          title: 'Grid',
-          children: [
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Table(
-                defaultColumnWidth: const FixedColumnWidth(SampathSpacing.x9l),
-                defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-                children: [
-                  TableRow(
-                    children: [
-                      const SizedBox.shrink(),
-                      for (final c in columns) Text(c, style: caption),
-                    ],
-                  ),
-                  for (final (label, cells) in rows)
-                    TableRow(
-                      children: [
-                        Text(label, style: caption),
-                        for (final cell in cells)
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: SampathSpacing.m,
-                            ),
-                            child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: cell,
-                            ),
-                          ),
-                      ],
-                    ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
 }

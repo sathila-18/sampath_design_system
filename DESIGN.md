@@ -394,6 +394,14 @@ There are 23 styles, all linked to `Alias Typography` variables. Names and value
 
 The app is mobile only. `Desktop-lg` is recorded for reference and isn't used in the Flutter package.
 
+### 4.5 Border widths (code-only)
+
+Figma has no variable or style for stroke weight, so this is a **code-only** style in `styles.dart`, recording the weights Figma's components use. Add a width only when a component in Figma uses it.
+
+| Code | Value | Used by |
+|---|---|---|
+| `SampathBorderWidth.thin` | 1 | `Brand avatar`, `Avatar` outlines |
+
 ---
 
 ## 5. Motion
@@ -595,8 +603,8 @@ All node IDs are in the component file `Osc9AnJnbWQLesqVlhNsii`. Where a Figma n
 | 26 | `login-button` | Buttons | `349:5042` | `SampathLoginButton` | `20px`, `24px` | Size (4) · State (runtime) | ⬜ |
 | 27 | `Chips-base` | Chips | `95:1811` | `SampathChipBase` | `16px` | Type: Unselected/Selected/Unselected-border · Size: XSmall/Small/Large · Leading slot · Trailing icon | ⬜ |
 | 28 | `Segmented_button-base` | Segmented button | `117:4667` | `SampathSegmentBase` | `16px` | Type: Unselected/Selected · State (runtime) · Leading slot | ⬜ |
-| 29 | `Brand avatar` | Avatar | `20:962` | `SampathBrandAvatar` | icon sizes | Type: Text/Image/Icon · Size: XSmall…XXXLarge (7) | ⬜ |
-| 30 | `Avatar` | Avatar | `932:1387` | `SampathAvatar` | icon sizes | Type: Image/Icon/Text · Size (7) | ⬜ |
+| 29 | `Brand avatar` | Avatar | `20:962` | `SampathBrandAvatar` | icon sizes | Type: Text/Image/Icon · Size: XSmall…XXXLarge (7) | ✅ |
+| 30 | `Avatar` | Avatar | `932:1387` | `SampathAvatar` | icon sizes | Type: Image/Icon/Text · Size (7) | ✅ |
 | 31 | `Nav-button` | Header | `91:816` | `SampathNavButton` | `24px`, Badge - indicator | State (runtime) · Show badge | ⬜ |
 | 32 | `Spinner` | Progress | `33:2331` | `SampathSpinner` | `48px` | Progress: 25/50/75%, Complete, Error | ⬜ |
 
@@ -798,6 +806,53 @@ SampathDividerDash()
 - **Semantics:** decorative, not read by screen readers.
 - **Widgetbook:** Components → Divider (Default with a Type knob, and All types including the dash) and Divider dash, in a 375 px phone-width frame, Light and Dark. Both Default pages have the live code box.
 
+### 9.3 Brand avatar and Avatar (Avatar)
+
+**Figma:** page **Avatar**. `Brand avatar` (`20:962`), the main avatar, on the brand octagon, and `Avatar` (`932:1387`), the secondary one, on a circle. Both have `Type` = Image / Icon / Text and 7 sizes. Avatar Group, Profile image and Online Indicator are separate components, not built yet.
+
+| Figma `Size` | `SampathAvatarSize` | Box | Icon (`user`) | Initials style |
+|---|---|---|---|---|
+| `Xsmall` | `xSmall` | 24 | `16px` | `Label/Small` |
+| `Small` | `small` | 32 | `20px` | `Label/Small` |
+| `Medium` | `medium` (default) | 40 | `24px` | `Label/Large` |
+| `Large` | `large` | 48 | `36px` | `Title/Large` |
+| `XLarge` | `xLarge` | 56 | `36px` | `Headline/Large-H4` |
+| `XXLarge` | `xxLarge` | 64 | `48px` | `Display/Small-H3` |
+| `XXXLarge` | `xxxLarge` | 100 | `48px` | `Display/Large-H1` |
+
+| | `Brand avatar` | `Avatar` |
+|---|---|---|
+| Shape | `SampathOctagonBorder` (same path as `46px bg`, checked against all 7 Figma vectors) | Circle (`Radius-Full`) |
+| Outline (every type) | `border-subtle`, 1 px, **centered** on the edge (half outside the box) | `border-subtle`, 1 px, **inside** the box |
+| Icon / Text background | `bg-secondary` | `bg-secondary` |
+| Image | Photo, `cover`, clipped to the shape, no background | Same |
+| Icon | `SampathIcons.user`, `fg-secondary`, centered | Same |
+| Initials | `text-secondary`, centered | Same |
+
+**API**
+
+```dart
+SampathBrandAvatar(image: NetworkImage(photoUrl), initials: 'SD')   // Image
+SampathBrandAvatar(initials: 'SD', size: SampathAvatarSize.large)   // Text
+SampathBrandAvatar()                                                // Icon
+SampathAvatar(initials: 'SD', size: SampathAvatarSize.small)        // same API, circle
+```
+
+**Built (13 Oct 2026).** `lib/components/avatar/`.
+
+- **Base → mapped (§7.2):** `AvatarBase` (internal) holds all layout and takes the shape and the stroke alignment. `SampathBrandAvatar` and `SampathAvatar` only pass those.
+- **Type isn't a parameter.** It follows the content: `image` → Image; no image, non-empty `initials` → Text; neither → Icon.
+- **Loading and errors:** while the photo loads, or if it fails, the avatar shows the initials, or the icon if there are none. It's never blank or broken.
+- **Initials** are shown exactly as passed (no casing, no trimming, not worked out from a name). They don't grow with the OS text scale, because the box is fixed.
+- **Border width** (1 px) isn't bound to a variable in Figma. It's `SampathBorderWidth.thin`, a code-only style (§4.5, §10 #22).
+- **Stroke alignment** follows Figma, which differs between the two (§10 #23).
+- **Centering:** content is centered. A few Figma text and icon layers sit up to 0.5 px off center (§10 #24).
+- **Default size** is `medium` (40). Figma's first variant is `Xsmall`, but a 24 px default isn't a useful default in code.
+- **Semantics:** with `semanticLabel`, one image node with that label; without it, decorative.
+- **Not applied:** Figma's initials use the OpenType `case` feature. It changes only punctuation next to capitals, so it has no effect on initials.
+- **Checked against Figma:** box sizes, icon sizes, text styles, colors (Light and Dark tokens), outline and photo crop for all 7 sizes × 3 types. Octagon path compared with every Figma `Brand avatar` vector in a test.
+- **Widgetbook:** Components → Brand avatar and Avatar. Each has a Default page (Type, Size, Initials knobs, live code box) and Sizes × types, Light and Dark. The sample photo is the Figma image fill, in `widgetbook/assets/images/` only.
+
 ---
 
 ## 10. Known issues and open decisions
@@ -825,6 +880,9 @@ SampathDividerDash()
 | 19 | `Circle Icon` (both sizes) uses effect style `Shadow/Resting_cards`. Decision: no shadow; code has none. | Icon sizes | 🔧 Fix in Figma (remove the shadow) |
 | 20 | `Square Icon` Large: the `36px` icon sits at y 13.6 instead of 14 (0.4 px above center). Code centers it. | Icon sizes | 🔧 Fix in Figma |
 | 21 | `46px bg` and `68px bg`: the `Background` frame is shifted 0.29 px left of the mask, leaving a 0.29 px unfilled sliver on the right edge. Code fills the whole octagon. | Icon sizes | 🔧 Fix in Figma |
+| 22 | `Brand avatar` and `Avatar`: the 1 px `border-subtle` stroke weight isn't bound to a variable, and Figma has no border-width tokens. **Resolved:** code-only style `SampathBorderWidth.thin` = 1 in `styles.dart` (§4.5). | Avatar | ✅ Resolved (13 Oct 2026) |
+| 23 | `Brand avatar` strokes its outline centered on the edge (half outside, so it draws 25 × 25 at 24), while `Avatar` draws its border inside the box. Code matches each. | Avatar | 🔧 Align in Figma (pick one) |
+| 24 | Off-center layers: `Avatar` Xsmall icon (x 3.71 instead of 4) and initials (0.21 px right); several `Brand avatar` initials are 0.5 px right (`left: 50% + 0.5px`). Code centers them. | Avatar | 🔧 Fix in Figma |
 
 ---
 
@@ -844,3 +902,5 @@ SampathDividerDash()
 | 13 Oct 2026 | 0.2 | Widgetbook: live code box (`widgetbook/lib/shared/code_snippet.dart`) under the Default use cases of Icon (each size page), Icon Badge, Square Icon and Circle Icon. Shows the pasteable `sampath_ds` call for the current knobs, defaults left out, one line up to 80 characters and dart-format style (one argument per line) beyond, with a Copy button. A test pins every `SampathIcons` field name. Widgetbook only, no package changes. |
 | 13 Oct 2026 | 0.2 | §9.2 Divider built: `SampathDivider` (Divider, Section Divider) and `SampathDividerDash` (line inset 0.5 px like Figma), with Widgetbook pages and code boxes. |
 | 13 Oct 2026 | 0.2 | Widgetbook code box uses Roboto Mono Regular, bundled in the widgetbook app only (OFL, `widgetbook/assets/fonts/`), because Flutter web can't use system monospace fonts. |
+| 13 Oct 2026 | 0.2 | §8.2 #29–30 avatars built: `SampathBrandAvatar` (octagon, reuses `SampathOctagonBorder`) and `SampathAvatar` (circle) on a shared `AvatarBase`, type from content with initials or icon fallback while a photo loads or fails. Widgetbook pages with code boxes and Sizes × types grids. New §10 #22–24. |
+| 13 Oct 2026 | 0.2 | §4.5 Border widths added as a code-only style: `SampathBorderWidth.thin` (1), used by the avatar outlines (§10 #22 resolved). |
