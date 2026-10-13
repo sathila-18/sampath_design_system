@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sampath_ds/sampath_ds.dart';
+import 'package:sampath_widgetbook/components/divider_use_cases.dart';
 import 'package:sampath_widgetbook/components/icon_container_use_cases.dart';
 import 'package:sampath_widgetbook/components/icon_use_cases.dart';
 import 'package:sampath_widgetbook/shared/code_snippet.dart';
@@ -131,6 +132,23 @@ void main() {
     });
   });
 
+  group('Divider', () {
+    test('defaults', () {
+      expect(dividerSnippet(), 'SampathDivider()');
+    });
+
+    test('section', () {
+      expect(
+        dividerSnippet(type: SampathDividerType.section),
+        'SampathDivider(type: SampathDividerType.section)',
+      );
+    });
+
+    test('dash', () {
+      expect(dividerDashSnippet, 'SampathDividerDash()');
+    });
+  });
+
   group('Circle Icon', () {
     test('defaults', () {
       expect(
@@ -194,6 +212,13 @@ void main() {
         );
         expect(tester.takeException(), isNull);
         expect(find.text(code), findsOneWidget);
+        expect(
+          tester
+              .widget<SelectableText>(find.byType(SelectableText))
+              .style
+              ?.fontFamily,
+          'RobotoMono',
+        );
 
         await tester.tap(find.text('Copy'));
         await tester.pump();
