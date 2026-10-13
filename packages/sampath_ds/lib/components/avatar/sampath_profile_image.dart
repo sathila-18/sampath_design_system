@@ -73,7 +73,11 @@ class SampathProfileImage extends StatelessWidget {
 
 /// The 24 px circle Figma calls `Online Indicator` (§10 #27), inside an
 /// invisible 44 × 44 tap area anchored to the avatar's bottom-right corner.
-class _EditPhotoButton extends StatelessWidget {
+///
+/// While pressed, the circle is `fg-action_pressed`. The color switches
+/// instantly (no animation), so there's nothing to turn off for Reduce
+/// motion.
+class _EditPhotoButton extends StatefulWidget {
   const _EditPhotoButton({
     required this.icon,
     required this.label,
@@ -88,11 +92,23 @@ class _EditPhotoButton extends StatelessWidget {
   final VoidCallback onTap;
 
   @override
+  State<_EditPhotoButton> createState() => _EditPhotoButtonState();
+}
+
+class _EditPhotoButtonState extends State<_EditPhotoButton> {
+  bool _pressed = false;
+
+  void _setPressed(bool value) {
+    if (_pressed != value) setState(() => _pressed = value);
+  }
+
+  @override
   Widget build(BuildContext context) {
     final colors = context.colors;
+    final onTap = widget.onTap;
     return Semantics(
       button: true,
-      label: label,
+      label: widget.label,
       excludeSemantics: true,
       onTap: onTap,
       child: MouseRegion(
@@ -100,6 +116,9 @@ class _EditPhotoButton extends StatelessWidget {
         child: GestureDetector(
           behavior: HitTestBehavior.opaque,
           onTap: onTap,
+          onTapDown: (_) => _setPressed(true),
+          onTapUp: (_) => _setPressed(false),
+          onTapCancel: () => _setPressed(false),
           child: SizedBox.square(
             dimension: SampathTouchTarget.min,
             child: Align(
@@ -108,10 +127,10 @@ class _EditPhotoButton extends StatelessWidget {
                 // Figma: 2 px in from the avatar's right and bottom edges.
                 padding: const EdgeInsets.all(SampathSpacing.xxs),
                 child: Container(
-                  width: _size,
-                  height: _size,
+                  width: _EditPhotoButton._size,
+                  height: _EditPhotoButton._size,
                   decoration: ShapeDecoration(
-                    color: colors.fgAction,
+                    color: _pressed ? colors.fgActionPressed : colors.fgAction,
                     shape: CircleBorder(
                       side: BorderSide(
                         color: colors.borderDefault,
@@ -123,7 +142,7 @@ class _EditPhotoButton extends StatelessWidget {
                   ),
                   alignment: Alignment.center,
                   child: SampathIcon(
-                    icon,
+                    widget.icon,
                     size: SampathIconSize.s16,
                     color: SampathIconColor.inverse,
                   ),

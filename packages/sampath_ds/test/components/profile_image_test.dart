@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sampath_ds/sampath_ds.dart';
@@ -150,5 +151,44 @@ void main() {
     await t.pumpWidget(_app(SampathProfileImage(onEditPhoto: () {})));
     await expectLater(t, meetsGuideline(iOSTapTargetGuideline));
     handle.dispose();
+  });
+
+  testWidgets('pressed: circle is fg-action_pressed until released', (t) async {
+    Color circleColor() =>
+        (t.widget<Container>(_circle).decoration! as ShapeDecoration).color!;
+
+    await t.pumpWidget(_app(SampathProfileImage(onEditPhoto: () {})));
+    expect(circleColor(), SampathColors.light.fgAction);
+
+    final origin = t.getTopLeft(find.byType(SampathProfileImage));
+    final gesture = await t.startGesture(origin + const Offset(86, 86));
+    await t.pump(kPressTimeout);
+    expect(circleColor(), SampathColors.light.fgActionPressed);
+
+    await gesture.up();
+    await t.pump();
+    expect(circleColor(), SampathColors.light.fgAction);
+
+    // Dragging off cancels the press.
+    final drag = await t.startGesture(origin + const Offset(86, 86));
+    await t.pump(kPressTimeout);
+    await drag.moveBy(const Offset(-200, -200));
+    await t.pump();
+    expect(circleColor(), SampathColors.light.fgAction);
+    await drag.up();
+  });
+
+  testWidgets('pressed in Dark uses the Dark fg-action_pressed', (t) async {
+    await t.pumpWidget(
+      _app(SampathProfileImage(onEditPhoto: () {}), colors: SampathColors.dark),
+    );
+    final origin = t.getTopLeft(find.byType(SampathProfileImage));
+    final gesture = await t.startGesture(origin + const Offset(86, 86));
+    await t.pump(kPressTimeout);
+    expect(
+      (t.widget<Container>(_circle).decoration! as ShapeDecoration).color,
+      SampathColors.dark.fgActionPressed,
+    );
+    await gesture.up();
   });
 }

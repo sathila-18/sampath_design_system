@@ -907,7 +907,7 @@ SampathAvatarGroup(
 |---|---|---|
 | Avatar | `Brand avatar` `XXXLarge`, 100 × 100, Image or Icon type | `SampathAvatarSize.xxxLarge` |
 | Button circle | 24 × 24, at x 74, y 74 (2 px in from the right and bottom) | 2 = `Space-XXS` |
-| Button fill | `fg-action` | `colors.fgAction` |
+| Button fill | `fg-action`; `fg-action_pressed` while pressed | `colors.fgAction`, `colors.fgActionPressed` |
 | Button ring | `border-default`, 1 px, **outside** the circle | `SampathBorderWidth.thin` |
 | Button icon | `16px`, `fg-inverse`, centered (4 px inset) | `SampathIconSize.s16`, `SampathIconColor.inverse` |
 | Tap area | 44 × 44, invisible, anchored to the avatar's bottom-right corner | `SampathTouchTarget.min` |
@@ -933,7 +933,9 @@ SampathProfileImage(image: NetworkImage(photoUrl)) // no button
 - **Button** shows only when `onEditPhoto` is given; tapping calls it and the app decides what happens. The edit version uses the same circle, size, colors and icon size as Figma's camera version.
 - **Tap area:** the 44 × 44 area sits inside the 100 px box at its bottom-right corner (x/y 56–100), so it covers the 24 px circle and the space around it without growing the widget. It's larger than the circle but not centered on it, because Flutter doesn't hit-test outside a widget's box.
 - **Semantics:** the button is one button node labeled "Add photo" or "Change photo". `editPhotoLabel` overrides the label, for example with a translation. The avatar itself is decorative.
-- **Not built:** pressed, hover and focus looks for the button. Figma doesn't show them.
+- **Pressed:** while the button is pressed, the circle is `fg-action_pressed` (designer's decision; Figma doesn't show it). The color switches instantly, with no animation, so Reduce motion has nothing to turn off. Dragging off the button cancels it.
+- **Not built:** hover and focus looks. Figma doesn't show them.
+- **Dark contrast:** the white icon on Dark `fg-action` is about 2.3:1. Kept as in Figma for now (§10 #28).
 - **Checked against Figma:** avatar size, button size and position (74, 74), fill, ring (1 px outside), icon size, color and inset, Light and Dark tokens.
 - **Widgetbook:** Components → Profile image. Default page (Photo and Editable knobs, live code box) and Photo × editable (all 4 combinations), Light and Dark.
 
@@ -970,6 +972,7 @@ SampathProfileImage(image: NetworkImage(photoUrl)) // no button
 | 25 | `Avatar Group`: the overlap (negative item spacing −4 / −8 / −12) isn't bound to a variable. Values equal `Space-XS` / `Space-M` / `Space-L`, which code uses. | Avatar Group | 🔧 Bind in Figma |
 | 26 | `Avatar Group`: the last spot is `+4` in `Count=3` and `Count=7` but a photo in `Count=2` and `Count=5`. Code shows `+N` only for more than 7 people. | Avatar Group | 🔧 Align in Figma |
 | 27 | `Profile image`: the add / change photo button is a loose frame named `Online Indicator`, but it's a button, not an online indicator. Code builds it as part of `SampathProfileImage`. | Profile image | 🔧 Design to rename in Figma |
+| 28 | Profile image button: white icon on fg-action is about 2.3:1 in Dark (needs 3:1). Options: dark icon in Dark mode, or a darker circle colour. | Profile image | 🔧 Design to decide in Figma. Code keeps the Figma colours for now. |
 
 ---
 
@@ -993,3 +996,4 @@ SampathProfileImage(image: NetworkImage(photoUrl)) // no button
 | 13 Oct 2026 | 0.2 | §4.5 Border widths added as a code-only style: `SampathBorderWidth.thin` (1), used by the avatar outlines (§10 #22 resolved). |
 | 13 Oct 2026 | 0.2 | §8.3 #43 Avatar Group built: `SampathAvatarGroup` from `SampathBrandAvatar` (3 sizes, overlaps `Space-XS`/`M`/`L`, up to 7 spots, `+N` beyond), with Widgetbook Default (code box) and Sizes × people pages. New §10 #25–26. |
 | 13 Oct 2026 | 0.2 | §8.3 #44 Profile image built: `SampathProfileImage` from a 100 px `SampathBrandAvatar`, with an add / change photo button (camera or edit icon, 44 × 44 tap area) shown when `onEditPhoto` is given. New §4.6 `SampathTouchTarget.min` (44). Widgetbook Default (code box) and Photo × editable pages. New §10 #27. |
+| 13 Oct 2026 | 0.2 | Profile image button: pressed state (`fg-action_pressed`, instant, no animation). New §10 #28 (Dark contrast of the button icon). |
