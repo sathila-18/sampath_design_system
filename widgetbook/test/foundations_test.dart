@@ -30,6 +30,7 @@ void main() {
     'Brand avatar grid': const AvatarGrid(shape: AvatarShape.brand),
     'Avatar grid': const AvatarGrid(shape: AvatarShape.circle),
     'Avatar Group grid': const AvatarGroupGrid(),
+    'Profile image grid': const ProfileImageGrid(),
   };
   final themes = {'Light': CatalogueTheme.light, 'Dark': CatalogueTheme.dark};
 

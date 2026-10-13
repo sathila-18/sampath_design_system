@@ -400,7 +400,15 @@ Figma has no variable or style for stroke weight, so this is a **code-only** sty
 
 | Code | Value | Used by |
 |---|---|---|
-| `SampathBorderWidth.thin` | 1 | `Brand avatar`, `Avatar` outlines |
+| `SampathBorderWidth.thin` | 1 | `Brand avatar`, `Avatar` outlines, `Profile image` button ring |
+
+### 4.6 Touch target (code-only)
+
+The minimum touch target from §2 rule 7, as a code-only style in `styles.dart`. It isn't a Figma variable: controls drawn smaller in Figma get an invisible tap area of at least this size.
+
+| Code | Value | Used by |
+|---|---|---|
+| `SampathTouchTarget.min` | 44 | `Profile image` button |
 
 ---
 
@@ -623,7 +631,7 @@ All node IDs are in the component file `Osc9AnJnbWQLesqVlhNsii`. Where a Figma n
 | 41 | `Progress-progress bar` | Progress | `31:2122` | `SampathProgress` | **Progress bar**, Text Box | ⬜ |
 | 42 | `Progress-Spinner` | Progress | `33:2348` | `SampathProgressSpinner` | **Spinner**, Text Box | ⬜ |
 | 43 | `Avatar Group` | Avatar | `14:1155` | `SampathAvatarGroup` | **Brand avatar** | ✅ |
-| 44 | `Profile image` | Avatar | `432:1610` | `SampathProfileImage` | **Brand avatar**, icons | ⬜ |
+| 44 | `Profile image` | Avatar | `432:1610` | `SampathProfileImage` | **Brand avatar**, icons | ✅ |
 | 45 | `Quick action- base` | Buttons | `366:7429` | `SampathQuickActionBase` | Circle Icon, Label | ⬜ |
 | 46 | `Contry selecter` | Input field | `49:5731` | `SampathCountrySelector` | Flag sizes, `24px` | ⬜ |
 | 47 | `Base-Bottom-Nav_light` | Bottom nav | `396:3427` | `SampathBottomNavItem` | `20px`, Badge - indicator | ⬜ |
@@ -808,7 +816,7 @@ SampathDividerDash()
 
 ### 9.3 Brand avatar and Avatar (Avatar)
 
-**Figma:** page **Avatar**. `Brand avatar` (`20:962`), the main avatar, on the brand octagon, and `Avatar` (`932:1387`), the secondary one, on a circle. Both have `Type` = Image / Icon / Text and 7 sizes. Avatar Group (§9.4) is built on `Brand avatar`. Profile image and Online Indicator are separate components, not built yet.
+**Figma:** page **Avatar**. `Brand avatar` (`20:962`), the main avatar, on the brand octagon, and `Avatar` (`932:1387`), the secondary one, on a circle. Both have `Type` = Image / Icon / Text and 7 sizes. Avatar Group (§9.4) and Profile image (§9.5) are built on `Brand avatar`. Online Indicator is a separate component, not built yet.
 
 | Figma `Size` | `SampathAvatarSize` | Box | Icon (`user`) | Initials style |
 |---|---|---|---|---|
@@ -891,6 +899,44 @@ SampathAvatarGroup(
 - **Figma differs:** `Count=3` shows 2 photos and `+4`, and `Count=7` shows 6 photos and `+4`, while `Count=2` and `Count=5` show only photos (§10 #26). Code follows the rule above: 3 or 7 people show 3 or 7 avatars.
 - **Widgetbook:** Components → Avatar Group. Default page (Size and Number of people knobs, live code box) and Sizes × people (every Figma variant, plus 10 people to show `6 + "+4"` like Figma's sample), Light and Dark. Sizes are columns so the grid fits. Spots cycle through five faces from the Figma image fills, cropped square to the face, in `widgetbook/assets/images/` only. The sixth Figma photo is left out: it's an Unsplash+ image with a visible watermark.
 
+### 9.5 Profile image (Avatar)
+
+**Figma:** page **Avatar**, `Profile image` (`432:1610`). A 100 px `Brand avatar` (`XXXLarge`) with a button at the bottom right. `Type` = Image / Icon. In Figma the button is a loose frame named `Online Indicator` (§10 #27). Figma only shows the camera button.
+
+| Part | Value | Token |
+|---|---|---|
+| Avatar | `Brand avatar` `XXXLarge`, 100 × 100, Image or Icon type | `SampathAvatarSize.xxxLarge` |
+| Button circle | 24 × 24, at x 74, y 74 (2 px in from the right and bottom) | 2 = `Space-XXS` |
+| Button fill | `fg-action` | `colors.fgAction` |
+| Button ring | `border-default`, 1 px, **outside** the circle | `SampathBorderWidth.thin` |
+| Button icon | `16px`, `fg-inverse`, centered (4 px inset) | `SampathIconSize.s16`, `SampathIconColor.inverse` |
+| Tap area | 44 × 44, invisible, anchored to the avatar's bottom-right corner | `SampathTouchTarget.min` |
+
+| | No photo | Photo |
+|---|---|---|
+| Avatar | `user` icon | the photo |
+| Button icon | `SampathIcons.camera` | `SampathIcons.editPencil` |
+| Button label | "Add photo" | "Change photo" |
+
+**API**
+
+```dart
+SampathProfileImage(image: NetworkImage(photoUrl), onEditPhoto: pickPhoto)
+SampathProfileImage(onEditPhoto: pickPhoto)        // icon, camera button
+SampathProfileImage(image: NetworkImage(photoUrl)) // no button
+```
+
+**Built (13 Oct 2026).** `lib/components/avatar/sampath_profile_image.dart`.
+
+- **Built from `SampathBrandAvatar` (§7.2)** at `xxxLarge`. The avatar is used as it is; the profile image only adds the button. Same type rules and loading / broken-photo fallback as §9.3. No initials: Figma has only Image and Icon.
+- **Type isn't a parameter.** It follows `image`.
+- **Button** shows only when `onEditPhoto` is given; tapping calls it and the app decides what happens. The edit version uses the same circle, size, colors and icon size as Figma's camera version.
+- **Tap area:** the 44 × 44 area sits inside the 100 px box at its bottom-right corner (x/y 56–100), so it covers the 24 px circle and the space around it without growing the widget. It's larger than the circle but not centered on it, because Flutter doesn't hit-test outside a widget's box.
+- **Semantics:** the button is one button node labeled "Add photo" or "Change photo". `editPhotoLabel` overrides the label, for example with a translation. The avatar itself is decorative.
+- **Not built:** pressed, hover and focus looks for the button. Figma doesn't show them.
+- **Checked against Figma:** avatar size, button size and position (74, 74), fill, ring (1 px outside), icon size, color and inset, Light and Dark tokens.
+- **Widgetbook:** Components → Profile image. Default page (Photo and Editable knobs, live code box) and Photo × editable (all 4 combinations), Light and Dark.
+
 ---
 
 ## 10. Known issues and open decisions
@@ -923,6 +969,7 @@ SampathAvatarGroup(
 | 24 | Off-center layers: `Avatar` Xsmall icon (x 3.71 instead of 4) and initials (0.21 px right); several `Brand avatar` initials are 0.5 px right (`left: 50% + 0.5px`). Code centers them. | Avatar | 🔧 Fix in Figma |
 | 25 | `Avatar Group`: the overlap (negative item spacing −4 / −8 / −12) isn't bound to a variable. Values equal `Space-XS` / `Space-M` / `Space-L`, which code uses. | Avatar Group | 🔧 Bind in Figma |
 | 26 | `Avatar Group`: the last spot is `+4` in `Count=3` and `Count=7` but a photo in `Count=2` and `Count=5`. Code shows `+N` only for more than 7 people. | Avatar Group | 🔧 Align in Figma |
+| 27 | `Profile image`: the add / change photo button is a loose frame named `Online Indicator`, but it's a button, not an online indicator. Code builds it as part of `SampathProfileImage`. | Profile image | 🔧 Design to rename in Figma |
 
 ---
 
@@ -945,3 +992,4 @@ SampathAvatarGroup(
 | 13 Oct 2026 | 0.2 | §8.2 #29–30 avatars built: `SampathBrandAvatar` (octagon, reuses `SampathOctagonBorder`) and `SampathAvatar` (circle) on a shared `AvatarBase`, type from content with initials or icon fallback while a photo loads or fails. Widgetbook pages with code boxes and Sizes × types grids. New §10 #22–24. |
 | 13 Oct 2026 | 0.2 | §4.5 Border widths added as a code-only style: `SampathBorderWidth.thin` (1), used by the avatar outlines (§10 #22 resolved). |
 | 13 Oct 2026 | 0.2 | §8.3 #43 Avatar Group built: `SampathAvatarGroup` from `SampathBrandAvatar` (3 sizes, overlaps `Space-XS`/`M`/`L`, up to 7 spots, `+N` beyond), with Widgetbook Default (code box) and Sizes × people pages. New §10 #25–26. |
+| 13 Oct 2026 | 0.2 | §8.3 #44 Profile image built: `SampathProfileImage` from a 100 px `SampathBrandAvatar`, with an add / change photo button (camera or edit icon, 44 × 44 tap area) shown when `onEditPhoto` is given. New §4.6 `SampathTouchTarget.min` (44). Widgetbook Default (code box) and Photo × editable pages. New §10 #27. |
