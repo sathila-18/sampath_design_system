@@ -81,16 +81,25 @@ class _CodeSnippetState extends State<CodeSnippet> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
-                child: SelectableText(
-                  widget.code,
-                  // Not bodySmall.copyWith: token styles carry
-                  // `package: 'sampath_ds'`, which would look for the font
-                  // there. Roboto Mono is bundled in this app (pubspec.yaml).
-                  style: TextStyle(
-                    fontFamily: 'RobotoMono',
-                    fontSize: SampathTextStyles.bodySmall.fontSize,
-                    height: SampathTextStyles.bodySmall.height,
-                    color: colors.textPrimary,
+                // Long lines stay whole; the box scrolls sideways.
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: SelectableText(
+                    widget.code,
+                    // inherit: false, so nothing is merged in from the
+                    // theme's DefaultTextStyle. Those styles come from
+                    // sampath_ds tokens with `package: 'sampath_ds'`, and a
+                    // merge keeps that package, which turns our family into
+                    // `packages/sampath_ds/RobotoMono` (a font that doesn't
+                    // exist). Roboto Mono is bundled in this app (pubspec).
+                    style: TextStyle(
+                      inherit: false,
+                      fontFamily: 'RobotoMono',
+                      fontSize: SampathTextStyles.bodySmall.fontSize,
+                      height: SampathTextStyles.bodySmall.height,
+                      textBaseline: TextBaseline.alphabetic,
+                      color: colors.textPrimary,
+                    ),
                   ),
                 ),
               ),
