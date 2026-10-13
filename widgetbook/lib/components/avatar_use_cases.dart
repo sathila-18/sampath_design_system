@@ -7,11 +7,12 @@ import '../shared/code_snippet.dart';
 import '../shared/variant_grid.dart';
 
 /// Use cases for `SampathBrandAvatar` and `SampathAvatar` (DESIGN.md §9.3)
-/// and `SampathAvatarGroup` (§9.4).
+/// `SampathAvatarGroup` (§9.4) and `SampathProfileImage` (§9.5).
 List<WidgetbookComponent> avatarComponents() => [
   _component(AvatarShape.brand),
   _component(AvatarShape.circle),
   _groupComponent(),
+  _profileComponent(),
 ];
 
 /// The two mapped avatars.
@@ -272,3 +273,85 @@ class AvatarGroupGrid extends StatelessWidget {
 
 String _groupSizeLabel(SampathAvatarGroupSize s) =>
     '${s.name} · ${s.avatarSize.dimension.toInt()}px';
+
+/// The `SampathProfileImage(...)` call. `pickPhoto` stands for the app's
+/// handler.
+String profileImageSnippet({required bool photo, required bool editable}) =>
+    dartCall('SampathProfileImage', const [], {
+      if (photo) 'image': _photoCode,
+      if (editable) 'onEditPhoto': 'pickPhoto',
+    });
+
+Widget _profileImage({required bool photo, required bool editable}) =>
+    SampathProfileImage(
+      image: photo ? sampleAvatarPhoto : null,
+      // Widgetbook only: the app decides what a tap does.
+      onEditPhoto: editable ? () {} : null,
+    );
+
+String _profileLabel({required bool photo, required bool editable}) =>
+    '${photo ? 'Photo' : 'No photo'} · '
+    '${editable ? (photo ? 'Change photo' : 'Add photo') : 'no button'}';
+
+WidgetbookComponent _profileComponent() => WidgetbookComponent(
+  name: 'Profile image',
+  useCases: [
+    WidgetbookUseCase(
+      name: 'Default',
+      builder: (context) {
+        final photo = context.knobs.boolean(
+          label: 'Photo',
+          description: 'Off: the user icon',
+          initialValue: true,
+        );
+        final editable = context.knobs.boolean(
+          label: 'Editable',
+          description: 'On: passes onEditPhoto, which shows the button',
+          initialValue: true,
+        );
+        return PreviewWithCode(
+          code: profileImageSnippet(photo: photo, editable: editable),
+          preview: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _profileImage(photo: photo, editable: editable),
+              const SizedBox(height: SampathSpacing.l),
+              TokenLabel(
+                'Profile image',
+                _profileLabel(photo: photo, editable: editable),
+              ),
+            ],
+          ),
+        );
+      },
+    ),
+    WidgetbookUseCase(
+      name: 'Photo × editable',
+      builder: (context) => const ProfileImageGrid(),
+    ),
+  ],
+);
+
+/// All 4 combinations of photo and button.
+class ProfileImageGrid extends StatelessWidget {
+  const ProfileImageGrid({super.key});
+
+  @override
+  Widget build(BuildContext context) => VariantGrid(
+    title: 'Profile image · photo × editable',
+    source: 'Figma Profile image (432:1610)',
+    // Fits the 100 px avatar.
+    columnWidth: SampathSpacing.x11l,
+    columns: const ['Photo', 'No photo'],
+    rows: [
+      for (final editable in [true, false])
+        (
+          editable ? 'Editable' : 'Not editable',
+          [
+            for (final photo in [true, false])
+              _profileImage(photo: photo, editable: editable),
+          ],
+        ),
+    ],
+  );
+}

@@ -338,4 +338,26 @@ void main() {
       );
     });
   });
+
+  group('Profile image', () {
+    test('all four combinations', () {
+      expect(
+        profileImageSnippet(photo: false, editable: false),
+        'SampathProfileImage()',
+      );
+      expect(
+        profileImageSnippet(photo: false, editable: true),
+        'SampathProfileImage(onEditPhoto: pickPhoto)',
+      );
+      expect(
+        profileImageSnippet(photo: true, editable: false),
+        'SampathProfileImage(image: NetworkImage(photoUrl))',
+      );
+      expect(
+        profileImageSnippet(photo: true, editable: true),
+        'SampathProfileImage(image: NetworkImage(photoUrl), '
+        'onEditPhoto: pickPhoto)',
+      );
+    });
+  });
 }

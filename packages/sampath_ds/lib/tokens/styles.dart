@@ -14,8 +14,16 @@ import 'sampath_palette.dart';
 /// Border widths. DESIGN.md §4.5. Code-only: Figma has no variable for
 /// stroke weight, so these are the weights its components use.
 abstract final class SampathBorderWidth {
-  /// 1 px: avatar outlines (`Brand avatar`, `Avatar`).
+  /// 1 px: avatar outlines (`Brand avatar`, `Avatar`) and the Profile
+  /// image button ring.
   static const double thin = 1;
+}
+
+/// Minimum touch target. DESIGN.md §2 rule 7 and §4.6. Code-only: an
+/// accessibility rule, not a Figma variable.
+abstract final class SampathTouchTarget {
+  /// 44 × 44, even when the visible control is smaller.
+  static const double min = 44;
 }
 
 /// Effect styles (`Shadow/*`). DESIGN.md §4.3.
