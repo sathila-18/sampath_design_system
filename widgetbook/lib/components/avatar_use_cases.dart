@@ -146,10 +146,31 @@ class AvatarGrid extends StatelessWidget {
 String _sizeLabel(SampathAvatarSize s) =>
     '${s.name} · ${s.dimension.toInt()}px';
 
-/// Sample people for the group previews: the Figma photo, with initials.
+/// Five faces from the Figma `Avatar Group` image fills, cropped square to
+/// the face (Widgetbook only), in an order where neighbors differ.
+const _groupFaces = [
+  SampathAvatarEntry(
+    image: AssetImage('assets/images/avatar_group_1.jpg'),
+    initials: 'NP',
+  ),
+  SampathAvatarEntry(
+    image: AssetImage('assets/images/avatar_group_2.jpg'),
+    initials: 'AR',
+  ),
+  SampathAvatarEntry(image: sampleAvatarPhoto, initials: 'SD'),
+  SampathAvatarEntry(
+    image: AssetImage('assets/images/avatar_group_4.jpg'),
+    initials: 'KF',
+  ),
+  SampathAvatarEntry(
+    image: AssetImage('assets/images/avatar_group_3.jpg'),
+    initials: 'MH',
+  ),
+];
+
+/// Sample people for the group previews, cycling through the faces.
 List<SampathAvatarEntry> samplePeople(int count) => [
-  for (var i = 0; i < count; i++)
-    const SampathAvatarEntry(image: sampleAvatarPhoto, initials: 'SD'),
+  for (var i = 0; i < count; i++) _groupFaces[i % _groupFaces.length],
 ];
 
 /// "1 person" / "8 people".

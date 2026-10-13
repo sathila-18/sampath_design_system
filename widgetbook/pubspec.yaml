@@ -63,6 +63,10 @@ flutter:
   # (Unsplash photo v2aKnjMbP_k). Widgetbook only.
   assets:
     - assets/images/avatar_sample.jpg
+    - assets/images/avatar_group_1.jpg
+    - assets/images/avatar_group_2.jpg
+    - assets/images/avatar_group_3.jpg
+    - assets/images/avatar_group_4.jpg
 
   # Code box font (widgetbook only). Roboto Mono, OFL: assets/fonts/RobotoMono-OFL.txt
   fonts:

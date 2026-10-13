@@ -889,7 +889,7 @@ SampathAvatarGroup(
 - **Semantics:** with `semanticLabel` (for example "8 people"), one node for the whole group; the avatars and `+N` aren't read separately. Without it, decorative.
 - **Checked against Figma:** avatar sizes, overlaps, widths of all 12 variants (in a test), stacking order and the `+N` spot (Text brand avatar, `text-secondary` on `bg-secondary`), Light and Dark.
 - **Figma differs:** `Count=3` shows 2 photos and `+4`, and `Count=7` shows 6 photos and `+4`, while `Count=2` and `Count=5` show only photos (§10 #26). Code follows the rule above: 3 or 7 people show 3 or 7 avatars.
-- **Widgetbook:** Components → Avatar Group. Default page (Size and Number of people knobs, live code box) and Sizes × people (every Figma variant, plus 10 people to show `6 + "+4"` like Figma's sample), Light and Dark. Sizes are columns so the grid fits. Every spot uses the one Figma sample photo; Figma uses several.
+- **Widgetbook:** Components → Avatar Group. Default page (Size and Number of people knobs, live code box) and Sizes × people (every Figma variant, plus 10 people to show `6 + "+4"` like Figma's sample), Light and Dark. Sizes are columns so the grid fits. Spots cycle through five faces from the Figma image fills, cropped square to the face, in `widgetbook/assets/images/` only. The sixth Figma photo is left out: it's an Unsplash+ image with a visible watermark.
 
 ---
 
