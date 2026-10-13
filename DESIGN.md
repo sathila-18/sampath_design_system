@@ -563,8 +563,8 @@ All node IDs are in the component file `Osc9AnJnbWQLesqVlhNsii`. Where a Figma n
 | # | Figma component | Page | Node | Code name | Variants / properties | Status |
 |---|---|---|---|---|---|---|
 | 1 | `16px`, `20px`, `24px`, `36px`, `48px` | Icon sizes | `20:245`, `20:261`, `20:277`, `20:293`, `20:353` | `SampathIcon` | State: Primary/Secondary/Disabled/Success/Error/Info/Warning (**see §9.1**) | ✅ |
-| 2 | `Divider` | Divider | `28:367` | `SampathDivider` | Type: Divider / Section Divider | ⬜ |
-| 3 | `Divider dash` | Divider | `596:1256` | `SampathDividerDash` | — | ⬜ |
+| 2 | `Divider` | Divider | `28:367` | `SampathDivider` | Type: Divider / Section Divider | ✅ |
+| 3 | `Divider dash` | Divider | `596:1256` | `SampathDividerDash` | — | ✅ |
 | 4 | `Badge - indicator` | Badge | `30:1500` | `SampathBadgeIndicator` | Size: Large/Small · Digits: None/Single/Double · Style: Red/Yellow/Green | ⬜ |
 | 5 | `Online Indicator` | Avatar | `14:995` | `SampathOnlineIndicator` | Size: XSmall…XXXLarge (7) | ⬜ |
 | 6 | `Indicator` | Indicator | `98:3532` | `SampathIndicator` | Type: Default/Selected | ⬜ |
@@ -771,6 +771,33 @@ SampathCircleIcon(SampathIcons.camera, size: SampathCircleIconSize.small)
 - **Box sizes** (42, 68, 24/42/50/64, 36/56) are component sizes in the size enums, like `SampathIconSize`.
 - **Widgetbook:** Components → Icon Badge, Square Icon, Circle Icon. Each has a Default page with Icon type, Icon, Size and State knobs (Circle has no State) and a grid of every variant, in Light and Dark.
 
+### 9.2 Divider and Divider dash (Divider)
+
+**Figma:** page **Divider**. `Divider` (`28:367`) with `Type` = `Divider` / `Section Divider`, and `Divider dash` (`596:1256`), a separate component.
+
+| Figma | Code | Height | Look | Color |
+|---|---|---|---|---|
+| `Type=Divider` | `SampathDivider()` | 1 px | Solid line | `border-default` |
+| `Type=Section Divider` | `SampathDivider(type: SampathDividerType.section)` | 8 px | Solid band | `border-default` |
+| `Divider dash` | `SampathDividerDash()` | 1 px | Stroke 1 px, dash 1.5 / gap 1.5, round caps (each dash shows about 2.5 px, gap about 0.5 px) | `border-default` |
+
+**API**
+
+```dart
+SampathDivider()                                   // Type=Divider
+SampathDivider(type: SampathDividerType.section)   // Type=Section Divider
+SampathDividerDash()
+```
+
+**Built (12 Oct 2026).** `lib/components/divider/`.
+
+- **Checked against Figma:** heights, color and dash pattern match. The dash was compared against a 10× export of the Figma line.
+- **Width:** Figma's components are fixed (375 and 343 wide). In code all three take the width of their parent; the screen or card supplies any margin.
+- **Heights** (1, 8) aren't bound to tokens in Figma. They're component sizes in `SampathDividerType` (and `SampathDividerDash.thickness`), like icon sizes.
+- **Horizontal only.** Figma has no vertical divider.
+- **Semantics:** decorative, not read by screen readers.
+- **Widgetbook:** Components → Divider (Default with a Type knob, and All types including the dash) and Divider dash, in a 375 px phone-width frame, Light and Dark.
+
 ---
 
 ## 10. Known issues and open decisions
@@ -814,3 +841,4 @@ SampathCircleIcon(SampathIcons.camera, size: SampathCircleIconSize.small)
 | 12 Oct 2026 | 0.2 | §9.1 Icon built: `SampathIcon` (5 sizes, 7 states + other fg-*), `SampathIcons` registry (47 Iconoir icons used in Figma, 4 brand, 1 partner), brand/partner SVGs exported from Figma, Widgetbook Icon pages. `xmark-solid` pending (§10 #17). |
 | 12 Oct 2026 | 0.2 | §10 #17 resolved: `xmark-solid` added to the registry as `XmarkCircleSolid` (48 Iconoir icons). New §10 #18: Figma uses an older Iconoir library (note for design). Widgetbook Icon pages get an Icon type knob. |
 | 12 Oct 2026 | 0.2 | §8.2 #16–19 icon containers built: `SampathIconBadge` (`46px bg`, `68px bg`, exact Figma octagon), `SampathSquareIcon`, `SampathCircleIcon` (no shadow), with Widgetbook pages. New §10 #19–21 (Figma fixes). |
+| 12 Oct 2026 | 0.2 | §9.2 Divider built: `SampathDivider` (Divider, Section Divider) and `SampathDividerDash`, with Widgetbook pages. |
