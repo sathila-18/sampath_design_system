@@ -779,7 +779,7 @@ SampathCircleIcon(SampathIcons.camera, size: SampathCircleIconSize.small)
 |---|---|---|---|---|
 | `Type=Divider` | `SampathDivider()` | 1 px | Solid line | `border-default` |
 | `Type=Section Divider` | `SampathDivider(type: SampathDividerType.section)` | 8 px | Solid band | `border-default` |
-| `Divider dash` | `SampathDividerDash()` | 1 px | Stroke 1 px, dash 1.5 / gap 1.5, round caps (each dash shows about 2.5 px, gap about 0.5 px) | `border-default` |
+| `Divider dash` | `SampathDividerDash()` | 1 px | Stroke 1 px, dash 1.5 / gap 1.5, round caps, line inset 0.5 px at each end like Figma (each dash shows about 2.5 px, gap about 0.5 px) | `border-default` |
 
 **API**
 
@@ -789,14 +789,14 @@ SampathDivider(type: SampathDividerType.section)   // Type=Section Divider
 SampathDividerDash()
 ```
 
-**Built (12 Oct 2026).** `lib/components/divider/`.
+**Built (13 Oct 2026).** `lib/components/divider/`.
 
-- **Checked against Figma:** heights, color and dash pattern match. The dash was compared against a 10× export of the Figma line.
+- **Checked against Figma (13 Oct):** heights (1, 8), `border-default` and the dash match. The Figma line runs x 0.5 → 342.5 with `stroke-dasharray="1.5 1.5"` and round caps, so the code insets the line by half the stroke to keep the caps inside the box.
 - **Width:** Figma's components are fixed (375 and 343 wide). In code all three take the width of their parent; the screen or card supplies any margin.
 - **Heights** (1, 8) aren't bound to tokens in Figma. They're component sizes in `SampathDividerType` (and `SampathDividerDash.thickness`), like icon sizes.
 - **Horizontal only.** Figma has no vertical divider.
 - **Semantics:** decorative, not read by screen readers.
-- **Widgetbook:** Components → Divider (Default with a Type knob, and All types including the dash) and Divider dash, in a 375 px phone-width frame, Light and Dark.
+- **Widgetbook:** Components → Divider (Default with a Type knob, and All types including the dash) and Divider dash, in a 375 px phone-width frame, Light and Dark. Both Default pages have the live code box.
 
 ---
 
@@ -842,4 +842,4 @@ SampathDividerDash()
 | 12 Oct 2026 | 0.2 | §10 #17 resolved: `xmark-solid` added to the registry as `XmarkCircleSolid` (48 Iconoir icons). New §10 #18: Figma uses an older Iconoir library (note for design). Widgetbook Icon pages get an Icon type knob. |
 | 12 Oct 2026 | 0.2 | §8.2 #16–19 icon containers built: `SampathIconBadge` (`46px bg`, `68px bg`, exact Figma octagon), `SampathSquareIcon`, `SampathCircleIcon` (no shadow), with Widgetbook pages. New §10 #19–21 (Figma fixes). |
 | 13 Oct 2026 | 0.2 | Widgetbook: live code box (`widgetbook/lib/shared/code_snippet.dart`) under the Default use cases of Icon (each size page), Icon Badge, Square Icon and Circle Icon. Shows the pasteable `sampath_ds` call for the current knobs, defaults left out, one line up to 80 characters and dart-format style (one argument per line) beyond, with a Copy button. A test pins every `SampathIcons` field name. Widgetbook only, no package changes. |
-| 12 Oct 2026 | 0.2 | §9.2 Divider built: `SampathDivider` (Divider, Section Divider) and `SampathDividerDash`, with Widgetbook pages. |
+| 13 Oct 2026 | 0.2 | §9.2 Divider built: `SampathDivider` (Divider, Section Divider) and `SampathDividerDash` (line inset 0.5 px like Figma), with Widgetbook pages and code boxes. |

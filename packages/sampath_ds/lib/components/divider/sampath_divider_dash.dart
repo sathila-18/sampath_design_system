@@ -38,9 +38,13 @@ class _DashPainter extends CustomPainter {
       ..strokeWidth = SampathDividerDash.thickness
       ..strokeCap = StrokeCap.round;
     final y = size.height / 2;
+    // Like the Figma line (x 0.5 → width − 0.5): inset by half the stroke so
+    // the round caps stay inside the box.
+    const cap = SampathDividerDash.thickness / 2;
+    final last = size.width - cap;
     const step = SampathDividerDash.dash + SampathDividerDash.gap;
-    for (var x = 0.0; x < size.width; x += step) {
-      final end = (x + SampathDividerDash.dash).clamp(0.0, size.width);
+    for (var x = cap; x < last; x += step) {
+      final end = (x + SampathDividerDash.dash).clamp(cap, last);
       canvas.drawLine(Offset(x, y), Offset(end, y), paint);
     }
   }

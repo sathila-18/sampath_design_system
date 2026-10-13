@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sampath_ds/sampath_ds.dart';
+import 'package:sampath_widgetbook/components/divider_use_cases.dart';
 import 'package:sampath_widgetbook/components/icon_container_use_cases.dart';
 import 'package:sampath_widgetbook/components/icon_use_cases.dart';
 import 'package:sampath_widgetbook/shared/code_snippet.dart';
@@ -128,6 +129,23 @@ void main() {
         'SampathSquareIcon(SampathIcons.insights, '
         'size: SampathSquareIconSize.small)',
       );
+    });
+  });
+
+  group('Divider', () {
+    test('defaults', () {
+      expect(dividerSnippet(), 'SampathDivider()');
+    });
+
+    test('section', () {
+      expect(
+        dividerSnippet(type: SampathDividerType.section),
+        'SampathDivider(type: SampathDividerType.section)',
+      );
+    });
+
+    test('dash', () {
+      expect(dividerDashSnippet, 'SampathDividerDash()');
     });
   });
 

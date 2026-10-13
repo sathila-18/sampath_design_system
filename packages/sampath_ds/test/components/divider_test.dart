@@ -53,20 +53,21 @@ void main() {
         box,
         paints
           ..line(
-            p1: const Offset(0, 0.5),
-            p2: const Offset(1.5, 0.5),
+            p1: const Offset(0.5, 0.5),
+            p2: const Offset(2, 0.5),
             color: dash,
             strokeWidth: 1,
           )
-          ..line(p1: const Offset(3, 0.5), p2: const Offset(4.5, 0.5)),
+          ..line(p1: const Offset(3.5, 0.5), p2: const Offset(5, 0.5)),
       );
       final painter = t.widget<CustomPaint>(box).painter!;
       final canvas = _CountingCanvas();
       painter.paint(canvas, const Size(343, 1));
-      // 343 / 3 → 115 dashes, the last cut at the edge.
-      expect(canvas.lines, 115);
+      // Line runs 0.5 → 342.5 like Figma: 342 / 3 → 114 dashes.
+      expect(canvas.lines, 114);
       expect(canvas.caps, {StrokeCap.round});
-      expect(canvas.maxX, 343);
+      expect(canvas.minX, 0.5);
+      expect(canvas.maxX, lessThanOrEqualTo(342.5));
     });
   });
 
@@ -82,6 +83,7 @@ void main() {
 
 class _CountingCanvas extends Fake implements Canvas {
   int lines = 0;
+  double minX = double.infinity;
   double maxX = 0;
   final caps = <StrokeCap>{};
 
@@ -89,6 +91,7 @@ class _CountingCanvas extends Fake implements Canvas {
   void drawLine(Offset p1, Offset p2, Paint paint) {
     lines++;
     caps.add(paint.strokeCap);
+    if (p1.dx < minX) minX = p1.dx;
     if (p2.dx > maxX) maxX = p2.dx;
   }
 }

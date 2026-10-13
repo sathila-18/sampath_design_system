@@ -3,6 +3,7 @@ import 'package:sampath_ds/sampath_ds.dart';
 import 'package:widgetbook/widgetbook.dart';
 
 import '../foundations/foundation_page.dart';
+import '../shared/code_snippet.dart';
 
 /// Use cases for `SampathDivider` and `SampathDividerDash` (DESIGN.md §9.2).
 List<WidgetbookComponent> dividerComponents() => [
@@ -20,6 +21,7 @@ List<WidgetbookComponent> dividerComponents() => [
           return _Preview(
             name: _typeLabel(type),
             detail: '${type.thickness.toInt()}px · border-default',
+            code: dividerSnippet(type: type),
             child: SampathDivider(type: type),
           );
         },
@@ -54,12 +56,23 @@ List<WidgetbookComponent> dividerComponents() => [
         builder: (context) => const _Preview(
           name: 'Divider dash',
           detail: '1px · dash 1.5 / gap 1.5 · border-default',
+          code: dividerDashSnippet,
           child: SampathDividerDash(),
         ),
       ),
     ],
   ),
 ];
+
+/// The `SampathDivider(...)` call, defaults left out.
+String dividerSnippet({SampathDividerType type = SampathDividerType.divider}) =>
+    dartCall('SampathDivider', const [], {
+      if (type != SampathDividerType.divider)
+        'type': 'SampathDividerType.${type.name}',
+    });
+
+/// `SampathDividerDash` has no parameters.
+const dividerDashSnippet = 'SampathDividerDash()';
 
 String _typeLabel(SampathDividerType t) => switch (t) {
   SampathDividerType.divider => 'Divider',
@@ -74,7 +87,7 @@ class _Frame extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => SizedBox(
-    width: _phoneWidth,
+    width: SampathSpacing.x13l,
     child: Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: SampathLayout.screenMargin,
@@ -85,22 +98,23 @@ class _Frame extends StatelessWidget {
   );
 }
 
-const double _phoneWidth = 375;
-
 class _Preview extends StatelessWidget {
   const _Preview({
     required this.name,
     required this.detail,
+    required this.code,
     required this.child,
   });
 
   final String name;
   final String detail;
+  final String code;
   final Widget child;
 
   @override
-  Widget build(BuildContext context) => Center(
-    child: Column(
+  Widget build(BuildContext context) => PreviewWithCode(
+    code: code,
+    preview: Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         _Frame(child: child),
