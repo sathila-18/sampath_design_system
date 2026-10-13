@@ -22,7 +22,7 @@ Instructions for Claude Code in this repo. Read them fully at the start of every
 2. **If something can't be expressed with existing tokens**, stop and ask. Don't add new values.
 3. **Base → mapped:** if the component has a base (§7.2), build or extend the base first. Mapped widgets are thin wrappers that pass fixed values to the base and never copy its layout.
 4. **Map Figma properties as in §7.3.** Interaction states (Enabled/Pressed/Disabled/Focused/Typing) are runtime state, not parameters.
-5. **Add a Widgetbook use case** for every variant, with knobs for its main properties. Show it in **Light and Dark**. Every Default use case shows a live code box (widgetbook/lib/shared/code_snippet.dart) with the code for the current knob values.
+5. **Add a Widgetbook use case** for every variant, with knobs for its main properties. Show it in **Light and Dark**. Every Default use case shows a live code box (widgetbook/lib/shared/code_snippet.dart) with the code for the current knob values. To view Widgetbook, run tool/serve_widgetbook.sh and rebuild after every change (no hot reload).
 6. **Compare with Figma:** check your Widgetbook result against the Figma screenshot, variant by variant. Fix any differences before saying it's done.
 7. **Write a short component spec** in `DESIGN.md` §9 (API, variants, tokens used, any decisions).
 8. **Update the Status** in `DESIGN.md` §8 to ✅, and add a line to §11 Changelog.
