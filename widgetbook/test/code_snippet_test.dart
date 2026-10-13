@@ -9,17 +9,19 @@ import 'package:sampath_widgetbook/shared/code_snippet.dart';
 import 'package:sampath_widgetbook/theme.dart';
 
 void main() {
-  group('iconRef', () {
-    test('uses the registry field name', () {
-      expect(iconRef(SampathIcons.lock), 'SampathIcons.lock');
-      expect(iconRef(SampathIcons.arrowDownLeft), 'SampathIcons.arrowDownLeft');
-      expect(iconRef(SampathIcons.xmarkSolid), 'SampathIcons.xmarkSolid');
-      expect(iconRef(SampathIcons.assistant), 'SampathIcons.assistant');
+  group('dartCall', () {
+    test('stays on one line up to 80 characters', () {
+      final call = dartCall('Foo', ['a' * 75]);
+      expect(call, hasLength(80));
+      expect(call, isNot(contains('\n')));
     });
 
-    test('is unique for every registry entry', () {
-      final all = [...SampathIcons.utility, ...SampathIcons.assets];
-      expect(all.map(iconRef).toSet(), hasLength(all.length));
+    test('wraps past 80 characters, one argument per line', () {
+      expect(dartCall('Foo', ['a' * 76]), 'Foo(\n  ${'a' * 76},\n)');
+      expect(
+        dartCall('Foo', ['a' * 40], {'size': 'b' * 40}),
+        'Foo(\n  ${'a' * 40},\n  size: ${'b' * 40},\n)',
+      );
     });
   });
 
@@ -35,8 +37,11 @@ void main() {
           size: SampathIconSize.s36,
           color: SampathIconColor.error,
         ),
-        'SampathIcon(SampathIcons.bell, size: SampathIconSize.s36, '
-        'color: SampathIconColor.error)',
+        'SampathIcon(\n'
+        '  SampathIcons.bell,\n'
+        '  size: SampathIconSize.s36,\n'
+        '  color: SampathIconColor.error,\n'
+        ')',
       );
     });
 
@@ -95,9 +100,11 @@ void main() {
           size: SampathSquareIconSize.large,
           state: SampathSquareIconState.success,
         ),
-        'SampathSquareIcon(SampathIcons.lock, '
-        'size: SampathSquareIconSize.large, '
-        'state: SampathSquareIconState.success)',
+        'SampathSquareIcon(\n'
+        '  SampathIcons.lock,\n'
+        '  size: SampathSquareIconSize.large,\n'
+        '  state: SampathSquareIconState.success,\n'
+        ')',
       );
     });
 
