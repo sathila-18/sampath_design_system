@@ -83,17 +83,14 @@ class _CodeSnippetState extends State<CodeSnippet> {
               Expanded(
                 child: SelectableText(
                   widget.code,
-                  style: SampathTextStyles.bodySmall.copyWith(
+                  // Not bodySmall.copyWith: token styles carry
+                  // `package: 'sampath_ds'`, which would look for the font
+                  // there. Roboto Mono is bundled in this app (pubspec.yaml).
+                  style: TextStyle(
+                    fontFamily: 'RobotoMono',
+                    fontSize: SampathTextStyles.bodySmall.fontSize,
+                    height: SampathTextStyles.bodySmall.height,
                     color: colors.textPrimary,
-                    // Widgetbook only: system monospace, no bundled font.
-                    fontFamily: 'Menlo',
-                    fontFamilyFallback: const [
-                      'SF Mono',
-                      'Consolas',
-                      'Roboto Mono',
-                      'Courier New',
-                      'monospace',
-                    ],
                   ),
                 ),
               ),

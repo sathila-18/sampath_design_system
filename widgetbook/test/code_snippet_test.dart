@@ -212,6 +212,13 @@ void main() {
         );
         expect(tester.takeException(), isNull);
         expect(find.text(code), findsOneWidget);
+        expect(
+          tester
+              .widget<SelectableText>(find.byType(SelectableText))
+              .style
+              ?.fontFamily,
+          'RobotoMono',
+        );
 
         await tester.tap(find.text('Copy'));
         await tester.pump();
